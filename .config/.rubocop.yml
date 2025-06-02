@@ -13,3 +13,16 @@ Style/StringLiterals:
 
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always_true
+
+plugins: rubocop-performance
+
+Metrics/MethodLength:
+  CountAsOne: ["array", "hash", "heredoc", "method_call"]
+
+Layout/LineLength:
+  Exclude:
+    - "**/spec/**/*"
+
+Metrics/BlockLength:
+  Exclude:
+    - "**/spec/**/*"
