@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-# Connect Four Module
+# Connect Four Game Module
 module ConnectFour
   # ConnectFour::Board class
   class Board
     # @todo generate a 7 x 6 board
+    attr_accessor :board
 
     def initialize(col = 7, row = 6)
       @col = col
@@ -12,20 +13,15 @@ module ConnectFour
     end
 
     def generate_board
-      board = Array.new(@row) { Array.new(@col, 0) }
-      p board.flatten.size
+      @board = Array.new(@row) { Array.new(@col, 0) }
+      p board
       board
     end
   end
 
-  # ConnectFour::Controller clas
+  # ConnectFour::Controller class
   class Controller
     # @todo console input control
-  end
-
-  # ConnectFour::Player class
-  class Player
-    # @todo create player
   end
 end
 
