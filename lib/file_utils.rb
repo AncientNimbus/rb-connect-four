@@ -79,7 +79,7 @@ module FileUtils
     # @return [String]
     def get_string(key_path, locale: "en", format: :yml)
       path = filepath(locale, ".config", "locale")
-      strings = load_file(path, format: format, symbols: false)
+      @strings ||= load_file(path, format: format, symbols: false)
 
       locale_strings = strings[locale]
       return "Missing locale: #{locale}" unless locale_strings
