@@ -7,5 +7,7 @@ module ConsoleGame
 
   # Game menu manager for console game
   class ConsoleMenu
+    def show_menu
+    end
   end
 end

@@ -15,5 +15,14 @@ module ConsoleGame
       @running = true
       @current_game = nil
     end
+
+    # run the console game manager
+    def run
+      puts "console is running"
+      puts "loading menu"
+      puts "hit any key to exit the program"
+      gets.chomp
+      puts "~~bye~~"
+    end
   end
 end

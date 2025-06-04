@@ -1,0 +1,3 @@
+en:
+  test_msg: "Hello, you are using the debug_en.yml text file."
+  test_array: [obj: "nested", 123, ".yml"]
