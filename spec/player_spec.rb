@@ -14,8 +14,7 @@ describe ConnectFour::Player do
 
     context "when a name is not provided" do
       it "uses the default value as name" do
-        new_name = ""
-        expect { player.edit_name(new_name) }.to change { player.name }.from("Player").to("Player")
+        expect(player.edit_name).to eq("Player")
       end
     end
   end
