@@ -70,10 +70,41 @@ module FileUtils
         obj
       end
     end
+
+    # Retrieves a localized string by key path from the specified locale file.
+    # Returns a missing message if the locale or key is not found.
+    # @param key_path [String] e.g., "welcome.greeting"
+    # @param locale [String] set localization target
+    # @param format [Symbol] set target file format, default: `:yml`
+    # @return [String]
+    def get_string(key_path, locale: "en", format: :yml)
+      path = filepath(locale, ".config", "locale")
+      strings = load_file(path, format: format, symbols: false)
+
+      locale_strings = strings[locale]
+      return "Missing locale: #{locale}" unless locale_strings
+
+      keys = key_path.to_s.split(".")
+      result = keys.reduce(locale_strings) do |val, key|
+        val&.[](key)
+      end
+
+      result || "Missing string: #{key_path}"
+    end
+
+    # Retrieves a localized string and perform String interpolation if needed.
+    # @param key_path [String] the translation key path e.g., "welcome.greeting"
+    # @param swaps [Hash] performs String interpolation, placeholder: `%{adj}` e.g., `{ adj: "awesome" }`
+    # @param locale [String] the locale to use (default: "en")
+    # @return [String] the translated and interpolated string
+    def s(key_path, swaps = {}, locale: "en")
+      str = get_string(key_path, locale: locale)
+
+      swaps.each do |key, value|
+        str = str.gsub(/%\{#{key}\}/, value.to_s)
+      end
+
+      str
+    end
   end
 end
-
-filename = FileUtils.formatted_filename("debug en")
-path = FileUtils.filepath(filename, ".config", "locale")
-p FileUtils.load_file(path)
-p FileUtils.load_file(path, format: :json)
