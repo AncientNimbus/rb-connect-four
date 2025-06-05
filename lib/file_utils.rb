@@ -100,9 +100,10 @@ module FileUtils
     # @param key_path [String] the translation key path e.g., "welcome.greeting"
     # @param swaps [Hash] performs String interpolation, placeholder: `%{adj}` e.g., `{ adj: "awesome" }`
     # @param locale [String] the locale to use (default: "en")
+    # @param format [Symbol] set target file format, default: `:yml`
     # @return [String] the translated and interpolated string
-    def s(key_path, swaps = {}, locale: "en")
-      str = get_string(key_path, locale: locale)
+    def s(key_path, swaps = {}, locale: "en", format: :yml)
+      str = get_string(key_path, locale: locale, format: format)
 
       swaps.each do |key, value|
         str = str.gsub(/%\{#{key}\}/, value.to_s)

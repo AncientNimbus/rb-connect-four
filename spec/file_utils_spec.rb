@@ -182,7 +182,7 @@ describe FileUtils do
 
       it "returns the target string if the key is valid and the is pointing to an array object" do
         str_key = "test_array"
-        result = F.get_string(str_key, locale: filename)
+        result = F.get_string(str_key, locale: filename, format: :json)
         expect(result[1]).to eq(123)
       end
 
@@ -195,12 +195,29 @@ describe FileUtils do
   end
 
   describe "#s" do
+    let(:filename) { "debug_en" }
+    let(:str_key) { "test_msg2" }
+    let(:adj_value) { "working" }
     context "when file is yaml" do
-      xit "" do
+      it "returns a string with string interpolation performed" do
+        result = F.s(str_key, { adj: adj_value }, locale: filename)
+        expect(result).to eq("This is working!")
+      end
+
+      it "returns a string without string interpolation performed when swap parameter is empty" do
+        result = F.s(str_key, locale: filename)
+        expect(result).to eq("This is %{adj}!")
       end
     end
     context "when file is json" do
-      xit "" do
+      it "returns a string with string interpolation performed" do
+        result = F.s(str_key, { adj: adj_value }, locale: filename, format: :json)
+        expect(result).to eq("This is working!")
+      end
+
+      it "returns a string without string interpolation performed when swap parameter is empty" do
+        result = F.s(str_key, locale: filename, format: :json)
+        expect(result).to eq("This is %{adj}!")
       end
     end
   end
