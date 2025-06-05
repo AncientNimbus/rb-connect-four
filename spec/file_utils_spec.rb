@@ -155,6 +155,7 @@ describe FileUtils do
   describe "#get_string" do
     filename = "debug_en"
     context "when file is yaml" do
+      before(:each) { F.instance_variable_set(:@strings, nil) }
       it "returns the target string if the key is valid" do
         str_key = "test_msg"
         result = F.get_string(str_key, locale: filename)
@@ -174,10 +175,11 @@ describe FileUtils do
       end
     end
     context "when file is json" do
+      before(:each) { F.instance_variable_set(:@strings, nil) }
       it "returns the target string if the key is valid" do
         str_key = "test_msg"
         result = F.get_string(str_key, locale: filename, format: :json)
-        expect(result).to eq("Hello, you are using the debug_en.yml text file.")
+        expect(result).to eq("Hello, you are using the debug_en.json text file.")
       end
 
       it "returns the target string if the key is valid and the is pointing to an array object" do
