@@ -17,10 +17,10 @@ module FileUtils
     # Return cross-system friendly filename.
     # @param filename [String]
     # @return [String] Formatted filename
-    def formatted_filename(filename)
+    def formatted_filename(filename, format = "")
       raise ArgumentError, "Forbidden character detected" unless filename.match?(/\A[\sa-zA-Z0-9._-]+\z/)
 
-      filename.downcase.tr(" ", "_")
+      filename.downcase.tr(" ", "_") + format
     end
 
     # Return the full path of a specific file.
@@ -85,7 +85,7 @@ module FileUtils
       path = filepath(locale, ".config", "locale")
       @strings ||= load_file(path, format: format, symbols: false)
 
-      locale_strings = strings[locale]
+      locale_strings = @strings[locale]
       return "Missing locale: #{locale}" unless locale_strings
 
       keys = key_path.to_s.split(".")
@@ -93,7 +93,7 @@ module FileUtils
         val&.[](key)
       end
 
-      result || "Missing string: #{key_path}"
+      result || "Missing string: '#{key_path}'"
     end
 
     # Retrieves a localized string and perform String interpolation if needed.

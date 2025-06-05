@@ -37,6 +37,14 @@ describe FileUtils do
       end
     end
 
+    context "when the format parameter is used" do
+      it "returns a value with the format suffix" do
+        filename = "USS-Enterprise"
+        type = ".yml"
+        expect(F.formatted_filename(filename, type)).to eq("uss-enterprise.yml")
+      end
+    end
+
     context "when the value contains forbidden characters" do
       it "raises an argument error" do
         filename = "Bad<|/:|>+===N'amE"
@@ -145,8 +153,55 @@ describe FileUtils do
   end
 
   describe "#get_string" do
+    filename = "debug_en"
+    context "when file is yaml" do
+      it "returns the target string if the key is valid" do
+        str_key = "test_msg"
+        result = F.get_string(str_key, locale: filename)
+        expect(result).to eq("Hello, you are using the debug_en.yml text file.")
+      end
+
+      it "returns the target string if the key is valid and the is pointing to an array object" do
+        str_key = "test_array"
+        result = F.get_string(str_key, locale: filename)
+        expect(result[1]).to eq(123)
+      end
+
+      it "returns missing string warning if the key is invalid" do
+        str_key = "bad_msg"
+        result = F.get_string(str_key, locale: filename)
+        expect(result).to eq("Missing string: 'bad_msg'")
+      end
+    end
+    context "when file is json" do
+      it "returns the target string if the key is valid" do
+        str_key = "test_msg"
+        result = F.get_string(str_key, locale: filename, format: :json)
+        expect(result).to eq("Hello, you are using the debug_en.yml text file.")
+      end
+
+      it "returns the target string if the key is valid and the is pointing to an array object" do
+        str_key = "test_array"
+        result = F.get_string(str_key, locale: filename)
+        expect(result[1]).to eq(123)
+      end
+
+      it "returns missing string warning if the key is invalid" do
+        str_key = "bad_msg"
+        result = F.get_string(str_key, locale: filename, format: :json)
+        expect(result).to eq("Missing string: 'bad_msg'")
+      end
+    end
   end
 
   describe "#s" do
+    context "when file is yaml" do
+      xit "" do
+      end
+    end
+    context "when file is json" do
+      xit "" do
+      end
+    end
   end
 end
