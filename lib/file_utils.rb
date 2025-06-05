@@ -18,6 +18,8 @@ module FileUtils
     # @param filename [String]
     # @return [String] Formatted filename
     def formatted_filename(filename)
+      raise ArgumentError, "Forbidden character detected" unless filename.match?(/\A[\sa-zA-Z0-9._-]+\z/)
+
       filename.downcase.tr(" ", "_")
     end
 
