@@ -33,10 +33,10 @@ module FileUtils
     # Check if a file exist in the given file path.
     # @param filepath [String]
     # @param use_filetype [Boolean]
-    # @param default_type [String]
-    def check_file?(filepath, use_filetype: true, default_type: ".yml")
-      default_type = "" unless use_filetype
-      filepath += default_type
+    # @param type [String]
+    def file_exist?(filepath, use_filetype: true, type: ".yml")
+      type = "" unless use_filetype
+      filepath += type
       File.exist?(filepath)
     end
 

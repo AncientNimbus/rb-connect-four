@@ -74,7 +74,31 @@ describe FileUtils do
     end
   end
 
-  describe "#check_file?" do
+  describe "#file_exist?" do
+    context "when a valid filepath is provided and default argument is used" do
+      let(:valid_yaml_file) { F.filepath("debug_en", ".config", "locale") }
+      it "is a valid filepath, returns true" do
+        expect(F.file_exist?(valid_yaml_file)).to be true
+      end
+    end
+    context "when a valid filepath is provided and type argument is set to '.json'" do
+      let(:valid_json_file) { F.filepath("debug_en", ".config", "locale") }
+      it "is a valid filepath, return true" do
+        expect(F.file_exist?(valid_json_file, type: ".json")).to be true
+      end
+    end
+    context "when a valid filepath is provided and filetype suffix is set to false" do
+      let(:valid_yaml_file) { F.filepath("debug_en.yml", ".config", "locale") }
+      it "is a valid filepath, return true" do
+        expect(F.file_exist?(valid_yaml_file, use_filetype: false)).to be true
+      end
+    end
+    context "when an invalid filepath is provided and default argument is used" do
+      let(:invalid_yaml_file) { F.filepath("debug_en", ".config") }
+      it "is not a valid filepath, return false" do
+        expect(F.file_exist?(invalid_yaml_file)).to be false
+      end
+    end
   end
 
   describe "#load_file" do
