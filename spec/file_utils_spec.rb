@@ -102,9 +102,46 @@ describe FileUtils do
   end
 
   describe "#load_file" do
-  end
+    let(:valid_yaml_file) { F.filepath("debug_en", ".config", "locale") }
+    let(:valid_json_file) { F.filepath("debug_en", ".config", "locale") }
 
-  describe "#to_symbols" do
+    context "when target file is a yaml and symbol keys format is set true" do
+      symbol_hash = { debug_en: { test_msg: "Hello, you are using the debug_en.yml text file.", test_msg2: "This is %{adj}!", test_array: [{ obj: "nested" }, 123, ".yml"] } }
+      it "returns a hash with symbols as keys" do
+        expect(F.load_file(valid_yaml_file)).to eq(symbol_hash)
+      end
+    end
+
+    context "when target file is a yaml and symbol keys format is set false" do
+      string_hash = { "debug_en" => { "test_msg" => "Hello, you are using the debug_en.yml text file.", "test_msg2" => "This is %{adj}!", "test_array" => [{ "obj" => "nested" }, 123, ".yml"] } }
+      it "returns a hash with string as keys" do
+        expect(F.load_file(valid_yaml_file, symbols: false)).to eq(string_hash)
+      end
+    end
+
+    context "when target file is a json and symbol keys format is set true" do
+      symbol_hash = { debug_en: { test_msg: "Hello, you are using the debug_en.json text file.", test_msg2: "This is %{adj}!", test_array: [{ obj: "nested" }, 123, ".json"] } }
+      it "returns a hash with symbols as keys" do
+        expect(F.load_file(valid_yaml_file, format: :json)).to eq(symbol_hash)
+      end
+    end
+
+    context "when target file is a json and symbol keys format is set false" do
+      string_hash = { "debug_en" => { "test_msg" => "Hello, you are using the debug_en.json text file.", "test_msg2" => "This is %{adj}!", "test_array" => [{ "obj" => "nested" }, 123, ".json"] } }
+      it "returns a hash with string as keys" do
+        expect(F.load_file(valid_yaml_file, format: :json, symbols: false)).to eq(string_hash)
+      end
+    end
+
+    context "when argument is invalid" do
+      it "raises an argument error if an incorrect format symbol is provided" do
+        expect { F.load_file(valid_yaml_file, format: :txt) }.to raise_error(ArgumentError, "Invalid format key: only :yml or :json is accepted")
+      end
+      it "prints a warning on the console with filepath attached if file does not exist" do
+        path = F.filepath("bad_file")
+        expect { F.load_file(path, format: :yml) }.to output("File not found: #{path}.yml\n").to_stdout
+      end
+    end
   end
 
   describe "#get_string" do

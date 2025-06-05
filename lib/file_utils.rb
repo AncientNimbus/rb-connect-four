@@ -46,6 +46,8 @@ module FileUtils
     # @param symbols [Boolean] set whether to use symbols as key, default: true
     # @return [Hash]
     def load_file(filepath, format: :yml, symbols: true)
+      raise ArgumentError, "Invalid format key: only :yml or :json is accepted" unless %i[yml json].include?(format)
+
       filepath += format == :yml ? ".yml" : ".json"
       return puts "File not found: #{filepath}" unless File.exist?(filepath)
 
