@@ -1,4 +1,13 @@
+# Textfile for Connect Four
 en:
-  test_msg: "Hello, you are using the debug_en.yml text file."
-  test_msg2: "This is %{adj}!"
-  test_array: [obj: "nested", 123, ".yml"]
+  console:
+    ver: "<<──────────────|Console Arcade v0.2.0 by Ancient Nimbus|──────────────>>"
+    menu: |
+      Below are a list of games available in this release:
+      +───────────────+───────────────+───────────────────────────────────+
+      │ GAME          │ LAUNCH CODE   │ INFO                              │
+      +───────────────+───────────────+───────────────────────────────────+
+      │ Connect 4     │ connect4      │ A game about connecting 4 discs   │
+      +───────────────+───────────────+───────────────────────────────────+
+    help: |
+      Available Commands:
