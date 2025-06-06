@@ -7,6 +7,22 @@ F = FileUtils
 module ConsoleGame
   # Game display & input manager for console game
   class Console
+    # prompt user to collect input
+    # @param reg [Regexp] patter to match
+    # @param msg [String] first print
+    # @param err_msg [String] second print
+    def prompt_user(reg = /.*/, msg = "Provide an input: ", err_msg = "Invalid input, please try again: ")
+      input = ""
+      loop do
+        msg_printer(msg)
+        input = gets.chomp
+        break if input.match?(reg) && !input.empty?
+
+        msg = err_msg
+      end
+      input
+    end
+
     # prompt message helper
     # @param msg [String] message to print
     # @param pre [String] message prefix
