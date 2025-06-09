@@ -8,11 +8,11 @@ require_relative "player"
 module ConsoleGame
   # Game Manager for Console game
   class GameManager
-    attr_reader :menu, :cli
+    include Console
+    attr_reader :menu
 
     def initialize
       @menu = ConsoleMenu.new
-      @cli = Console.new
       @p1 = Player.new
       @running = true
       @current_game = nil
@@ -20,12 +20,10 @@ module ConsoleGame
 
     # run the console game manager
     def run
-      puts "console is running"
-      # puts menu.show
-      puts cli.msg_printer(menu.show)
-      puts "hit any key to exit the program"
-      gets.chomp
-      puts "~~bye~~"
+      # greet
+      menu.help
+      # lobby
+      menu.handle_input(allow_empty: true) while @running
     end
   end
 end
