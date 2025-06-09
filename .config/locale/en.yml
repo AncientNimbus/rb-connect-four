@@ -1,16 +1,29 @@
 # Textfile for Connect Four
 en:
   console:
-    ver: "<<──────────────|Console Arcade v0.2.0 by Ancient Nimbus|──────────────>>"
+    ver: "|<<<───────────────|⟡ Ruby Arcade ⟡ v0.2.0 by Ancient Nimbus|───────────────>>>|"
     menu: |
-      Below are a list of games available in this release:
-      +───────────────+───────────────+───────────────────────────────────+
-      │ GAME          │ LAUNCH CODE   │ INFO                              │
-      +───────────────+───────────────+───────────────────────────────────+
-      │ Connect 4     │ connect4      │ A game about connecting 4 discs   │
-      +───────────────+───────────────+───────────────────────────────────+
+      * Welcome to ⟡ Ruby Arcade ⟡
+      *
+      * Games available in this release:
+      * +───────────────+───────────────+────────────────────────────────────────────+
+      * │ GAME          │ LAUNCH CODE   │ INFO                                       │
+      * +───────────────+───────────────+────────────────────────────────────────────+
+      * │ Connect 4     │ connect4      │ Align four discs in a row to win           │
+      * +───────────────+───────────────+────────────────────────────────────────────+
+      *
+      * To run a game, type '--play <launch code>' to run a game. 
+      * E.g., '--play connect4'
     help: |
-      Available Commands:
+      * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
+      * │ * Available commands:               |                                      │
+      * │ * Help - [--help]                   | * Display all available commands     │
+      * │ * Play - [--play] [<app name>]      | * Run an app e.g., '--play connect4' │
+      * │ * Exit - [--exit | --ttfn]          | * Safely close the program           │
+      * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
+    exit: "~~Bye~~"
+    cmd_err: "Invalid commands, type --help to see all available commands."
+    run_app: "Launching %{app}..."
     msg:
-      std: "Provide an input: "
+      std: ">>> "
       err: "Invalid input, please try again: "
