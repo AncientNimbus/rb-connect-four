@@ -15,7 +15,7 @@ module ConsoleGame
     def print_msg(msg = "Using message printer", pre: "", suf: "", mode: :puts)
       return ArgumentError("Invalid mode used for this method") unless %i[puts print p].include?(mode)
 
-      formatted_msg = pre + msg + suf
+      formatted_msg = "#{pre}#{msg}#{suf}"
       method(mode).call(formatted_msg)
     end
 
@@ -60,11 +60,9 @@ module ConsoleGame
   class ConsoleMenu
     include Console
 
-    attr_reader :commands
+    attr_reader :commands, :game_manager
 
     def initialize(game_manager = nil)
-      attr_reader :game_manager
-
       @game_manager = game_manager
       @commands = { "exit" => method(:quit), "ttfn" => method(:quit),
                     "help" => method(:help), "play" => method(:play) }
@@ -105,10 +103,12 @@ module ConsoleGame
     def play(arr = [])
       return print_msg(F.s("console.msg.gm_err")) unless game_manager
 
-      if game_manager.apps.include?(arr[0])
-        print_msg(F.s("console.msg.run", { app: arr[0] }))
+      app_name = arr[0]
+      if game_manager.apps.key?(app_name)
+        print_msg(F.s("console.msg.run", { app: app_name }))
 
-        # game_manager.current_game
+        game_manager.apps[app_name].call
+
       else
         print_msg(F.s("console.msg.run_err"))
       end
