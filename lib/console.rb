@@ -41,8 +41,9 @@ module ConsoleGame
     # returns true if user input matches available commands
     # @param input [String] user input
     # @param commands [Array<String>] command string keys
+    # @param flags [Array<String>] command pattern prefixes
     # @return [Boolean, Array<Boolean, String>] whether it is a command or not
-    def command?(input, commands = %w[exit debug], flags = %w[-- -])
+    def command?(input, commands = %w[exit debug], flags: %w[-- -])
       case
       when input[0..1] == flags[0]
         input.delete_prefix!(flags[0])
@@ -51,7 +52,7 @@ module ConsoleGame
       else
         return false
       end
-      [commands.include?(input), input]
+      [true, commands.include?(input), input]
     end
   end
 
@@ -67,13 +68,22 @@ module ConsoleGame
     end
 
     # process user input
-    def handle_input
-      input = prompt_user
-      input_arr = input.split(" ")
-      @input_is_cmd, cmd = command?(input_arr[0], commands)
-      # return unless @input_is_cmd
+    # @param msg [String] first print
+    # @param err_msg [String] second print
+    # @param reg [Regexp] pattern to match
+    # @param allow_empty [Boolean] allow empty input value, default to false
+    def handle_input(msg = F.s("console.msg.std"), err_msg: F.s("console.msg.err"), reg: /.*/, allow_empty: false)
+      input = prompt_user(msg, err_msg: err_msg, reg: reg, allow_empty: allow_empty)
+      return input if input.empty?
 
-      @input_is_cmd ? commands[cmd].call(input_arr[1..]) : print_msg("Invalid commands")
+      input_arr = input.split(" ")
+      @input_is_cmd, is_valid, cmd = command?(input_arr[0], commands)
+
+      if @input_is_cmd
+        is_valid ? commands[cmd].call(input_arr[1..]) : print_msg(F.s("console.cmd_err"))
+      else
+        input
+      end
     end
 
     # Display the console menu
@@ -82,13 +92,15 @@ module ConsoleGame
     end
 
     # Launch a game
-    def play(_arr = [])
-      print_msg("Launching a game")
+    # @param arr [Array<String>] optional arguments
+    def play(arr = [])
+      print_msg(F.s("console.run_app", { app: arr[0] }), pre: "\n* ")
     end
 
     # Exit sequences
     def do_at_exit(_arg = [])
-      print_msg(F.s("console.exit"))
+      @running = false
+      print_msg(F.s("console.exit"), pre: "* ")
       exit
     end
   end
