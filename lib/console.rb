@@ -63,7 +63,7 @@ module ConsoleGame
     attr_reader :commands
 
     def initialize
-      @commands = { "exit" => method(:do_at_exit), "help" => method(:help), "play" => method(:play) }
+      @commands = { "exit" => method(:quit), "ttfn" => method(:quit), "help" => method(:help), "play" => method(:play) }
       @input_is_cmd = false
     end
 
@@ -98,7 +98,7 @@ module ConsoleGame
     end
 
     # Exit sequences
-    def do_at_exit(_arg = [])
+    def quit(_arg = [])
       @running = false
       print_msg(F.s("console.exit"), pre: "* ")
       exit
