@@ -6,25 +6,7 @@ F = FileUtils
 
 module ConsoleGame
   # Game display & input manager for console game
-  class Console
-    # prompt user to collect input
-    # @param msg [String] first print
-    # @param err_msg [String] second print
-    # @param reg [Regexp] pattern to match
-    # @param allow_empty [Boolean] allow empty input value, default to false
-    # @return [String] user input
-    def prompt_user(msg = F.s("console.msg.std"), err_msg: F.s("console.msg.err"), reg: /.*/, allow_empty: false)
-      input = ""
-      loop do
-        print_msg(msg, mode: :print)
-        input = gets.chomp
-        break if input.match?(reg) && (!input.empty? || allow_empty)
-
-        msg = err_msg
-      end
-      input
-    end
-
+  module Console
     # prompt message helper
     # @param msg [String] message to print
     # @param pre [String] message prefix
@@ -37,29 +19,77 @@ module ConsoleGame
       method(mode).call(formatted_msg)
     end
 
+    # prompt user to collect input
+    # @param msg [String] first print
+    # @param err_msg [String] second print
+    # @param reg [Regexp] pattern to match
+    # @param allow_empty [Boolean] allow empty input value, default to false
+    # @return [String] user input
+    def prompt_user(msg = F.s("console.msg.std"), err_msg: F.s("console.msg.err"), reg: /.*/, allow_empty: false)
+      input = ""
+      loop do
+        print_msg(msg, mode: :print)
+        input = gets.chomp
+        # p command?(input)
+        break if input.match?(reg) && (!input.empty? || allow_empty)
+
+        msg = err_msg
+      end
+      input
+    end
+
     # returns true if user input matches available commands
     # @param input [String] user input
     # @param commands [Array<String>] command string keys
-    # @return [Boolean] whether it is a command or not
-    def command?(input, commands = ["exit"])
-      commands.include?(input.delete_prefix("-")) || commands.include?(input.delete_prefix("--"))
+    # @return [Boolean, Array<Boolean, String>] whether it is a command or not
+    def command?(input, commands = %w[exit debug], flags = %w[-- -])
+      case
+      when input[0..1] == flags[0]
+        input.delete_prefix!(flags[0])
+      when input[0] == flags[1]
+        input.delete_prefix!(flags[1])
+      else
+        return false
+      end
+      [commands.include?(input), input]
     end
   end
 
   # Game menu manager for console game
   class ConsoleMenu
+    include Console
+
+    attr_reader :commands
+
     def initialize
-      @commands = { "exit" => method(:exit), "help" => method(:help), "play" => method(:play) }
+      @commands = { "exit" => method(:do_at_exit), "help" => method(:help), "play" => method(:play) }
+      @input_is_cmd = false
+    end
+
+    # process user input
+    def handle_input
+      input = prompt_user
+      input_arr = input.split(" ")
+      @input_is_cmd, cmd = command?(input_arr[0], commands)
+      # return unless @input_is_cmd
+
+      @input_is_cmd ? commands[cmd].call(input_arr[1..]) : print_msg("Invalid commands")
     end
 
     # Display the console menu
-    def help
-      F.s("console.menu")
+    def help(_arr = [])
+      print_msg(F.s("console.menu"))
     end
 
     # Launch a game
-    def play
-      F.s("Launching a game")
+    def play(_arr = [])
+      print_msg("Launching a game")
+    end
+
+    # Exit sequences
+    def do_at_exit(_arg = [])
+      print_msg(F.s("console.exit"))
+      exit
     end
   end
 end
