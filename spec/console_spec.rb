@@ -6,11 +6,9 @@ describe ConsoleGame::Console do
   describe "#prompt_user" do
   end
 
-  describe "msg_printer" do
+  describe "print_msg" do
   end
 end
 
 describe ConsoleGame::ConsoleMenu do
-  describe "#show" do
-  end
 end

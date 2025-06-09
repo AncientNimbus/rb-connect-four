@@ -62,8 +62,12 @@ module ConsoleGame
 
     attr_reader :commands
 
-    def initialize
-      @commands = { "exit" => method(:quit), "ttfn" => method(:quit), "help" => method(:help), "play" => method(:play) }
+    def initialize(game_manager = nil)
+      attr_reader :game_manager
+
+      @game_manager = game_manager
+      @commands = { "exit" => method(:quit), "ttfn" => method(:quit),
+                    "help" => method(:help), "play" => method(:play) }
       @input_is_cmd = false
     end
 
@@ -87,20 +91,33 @@ module ConsoleGame
     end
 
     # Display the console menu
+    # @param str [String] textfile key
+    def show(str)
+      print_msg(F.s(str))
+    end
+
     def help(_arr = [])
-      print_msg(F.s("console.menu"))
+      show("console.help")
     end
 
     # Launch a game
     # @param arr [Array<String>] optional arguments
     def play(arr = [])
-      print_msg(F.s("console.run_app", { app: arr[0] }), pre: "\n* ")
+      return print_msg(F.s("console.msg.gm_err")) unless game_manager
+
+      if game_manager.apps.include?(arr[0])
+        print_msg(F.s("console.msg.run", { app: arr[0] }))
+
+        # game_manager.current_game
+      else
+        print_msg(F.s("console.msg.run_err"))
+      end
     end
 
     # Exit sequences
     def quit(_arg = [])
-      @running = false
-      print_msg(F.s("console.exit"), pre: "* ")
+      game_manager.running = false
+      print_msg(F.s("console.exit"))
       exit
     end
   end

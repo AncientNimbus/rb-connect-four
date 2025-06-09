@@ -6,7 +6,8 @@ module ConsoleGame
     # @todo create player
     attr_reader :name
 
-    def initialize(name = "Player")
+    def initialize(game_manager = nil, name = "Player")
+      @game_manager = game_manager
       @name = name
       @moves = []
     end

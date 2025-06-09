@@ -21,9 +21,11 @@ en:
       * │ * Play - [--play] [<app name>]      | * Run an app e.g., '--play connect4' │
       * │ * Exit - [--exit | --ttfn]          | * Safely close the program           │
       * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
-    exit: "~~Bye~~"
+    exit: "\n* ~~Bye~~"
     cmd_err: "Invalid commands, type --help to see all available commands."
-    run_app: "Launching %{app}..."
     msg:
       std: ">>> "
       err: "Invalid input, please try again: "
+      gm_err: "No game manager available"
+      run: "\n* Launching %{app}..."
+      run_err: "\n* Invalid launch code, please try again."
