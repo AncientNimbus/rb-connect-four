@@ -11,3 +11,6 @@ en:
       +───────────────+───────────────+───────────────────────────────────+
     help: |
       Available Commands:
+    msg:
+      std: "Provide an input: "
+      err: "Invalid input, please try again: "
