@@ -10,15 +10,16 @@ module ConsoleGame
   # Game Manager for Console game
   class GameManager
     include Console
-    attr_reader :apps, :menu
-    attr_accessor :running, :current_game
+    attr_reader :apps, :menu, :p1
+    attr_accessor :running, :active_game
 
     def initialize(lang: "en")
+      FileUtils.set_locale(lang)
       @running = true
       @apps = { "connect4" => method(:connect_four) }
-      @menu = ConsoleMenu.new(self, lang)
+      @menu = ConsoleMenu.new(self)
       @p1 = Player.new(self)
-      @current_game = nil
+      @active_game = nil
     end
 
     # run the console game manager
@@ -31,8 +32,8 @@ module ConsoleGame
     end
 
     def connect_four
-      puts "Hello from #{self.class}"
-      self.current_game = ConnectFour.new
+      self.active_game = ConnectFour.new(self)
+      active_game.start
     end
   end
 end
