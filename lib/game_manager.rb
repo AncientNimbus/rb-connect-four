@@ -13,10 +13,10 @@ module ConsoleGame
     attr_reader :apps, :menu
     attr_accessor :running, :current_game
 
-    def initialize
+    def initialize(lang: "en")
       @running = true
       @apps = { "connect4" => method(:connect_four) }
-      @menu = ConsoleMenu.new(self)
+      @menu = ConsoleMenu.new(self, lang)
       @p1 = Player.new(self)
       @current_game = nil
     end

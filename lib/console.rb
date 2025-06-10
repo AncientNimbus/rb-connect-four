@@ -63,8 +63,8 @@ module ConsoleGame
 
     attr_reader :commands, :game_manager
 
-    def initialize(game_manager = nil)
-      F.set_locale
+    def initialize(game_manager = nil, lang = "en")
+      F.set_locale(lang)
       String.prevent_colors = true
       @game_manager = game_manager
       @commands = { "exit" => method(:quit), "ttfn" => method(:quit),

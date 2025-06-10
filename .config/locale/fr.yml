@@ -1,0 +1,31 @@
+# Textfile for Connect Four (Unfinished translation, for testing only)
+fr:
+  console:
+    ver: "|<<<───────────────|⟡ Ruby Arcade ⟡ v0.2.0 by Ancient Nimbus|───────────────>>>|"
+    menu: |
+      * Bienvenue dans ⟡ Ruby Arcade ⟡ (Unfinished translation, for testing only)
+      *
+      * Jeux disponibles dans cette version :
+      * +───────────────+───────────────+────────────────────────────────────────+
+      * │ JEU           │ CODE LANCEMENT│ INFO                                   │
+      * +───────────────+───────────────+────────────────────────────────────────+
+      * │ Connect 4     │ connect4      │ Alignez quatre jetons d'affilée pour gagner │
+      * +───────────────+───────────────+────────────────────────────────────────+
+      *
+      * Pour lancer un jeu, tapez '--play <code de lancement>' pour exécuter un jeu.
+      * Ex : '--play connect4'
+    help: |
+      * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
+      * │ * Commandes disponibles :           |                                      │
+      * │ * Aide - [--help]                   | * Afficher toutes les commandes      │
+      * │ * Jouer - [--play] [<nom app>]      | * Lancer une app ex : '--play connect4' │
+      * │ * Quitter - [--exit | --ttfn]       | * Fermer le programme en sécurité    │
+      * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
+    exit: "\n* ~~Au revoir~~"
+    cmd_err: "Commandes invalides, tapez --help pour voir toutes les commandes disponibles."
+    msg:
+      std: ">>> "
+      err: "Entrée invalide, veuillez réessayer : "
+      gm_err: "Aucun gestionnaire de jeu disponible"
+      run: "\n* Lancement de %{app}..."
+      run_err: "\n* Code de lancement invalide, veuillez réessayer."

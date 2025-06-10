@@ -2,4 +2,4 @@
 
 require_relative "./lib/game_manager"
 
-ConsoleGame::GameManager.new.run
+ConsoleGame::GameManager.new(lang: "en").run
