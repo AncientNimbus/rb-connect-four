@@ -2,6 +2,7 @@
 
 require "yaml"
 require "json"
+require "colorize"
 
 # Filer operations helper module
 # @author Ancient Nimbus
@@ -99,14 +100,15 @@ module FileUtils
     # Retrieves a localized string and perform String interpolation if needed.
     # @param key_path [String] the translation key path e.g., "welcome.greeting"
     # @param swaps [Hash] performs String interpolation, placeholder: `%{adj}` e.g., `{ adj: "awesome" }`
+    # @param colorize_swaps [Symbol] add coloring to interpolated strings
     # @param locale [String] the locale to use (default: "en")
     # @param format [Symbol] set target file format, default: `:yml`
     # @return [String] the translated and interpolated string
-    def s(key_path, swaps = {}, locale: "en", format: :yml)
+    def s(key_path, swaps = {}, colorize_swaps = :default, locale: "en", format: :yml)
       str = get_string(key_path, locale: locale, format: format)
 
       swaps.each do |key, value|
-        str = str.gsub(/%\{#{key}\}/, value.to_s)
+        str = str.gsub(/%\{#{key}\}/, value.to_s.colorize(colorize_swaps))
       end
 
       str

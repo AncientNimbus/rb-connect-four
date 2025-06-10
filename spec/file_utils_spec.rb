@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "colorize"
 require_relative "../lib/file_utils"
 
 F = FileUtils
@@ -202,8 +203,9 @@ describe FileUtils do
     let(:adj_value) { "working" }
     context "when file is yaml" do
       it "returns a string with string interpolation performed" do
+        colored_str = adj_value.colorize(:default)
         result = F.s(str_key, { adj: adj_value }, locale: filename)
-        expect(result).to eq("This is working!")
+        expect(result).to eq("This is #{colored_str}!")
       end
 
       it "returns a string without string interpolation performed when swap parameter is empty" do
@@ -213,8 +215,9 @@ describe FileUtils do
     end
     context "when file is json" do
       it "returns a string with string interpolation performed" do
+        colored_str = adj_value.colorize(:default)
         result = F.s(str_key, { adj: adj_value }, locale: filename, format: :json)
-        expect(result).to eq("This is working!")
+        expect(result).to eq("This is #{colored_str}!")
       end
 
       it "returns a string without string interpolation performed when swap parameter is empty" do
