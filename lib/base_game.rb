@@ -6,5 +6,10 @@ module ConsoleGame
     def initialize(title = "Console Game")
       @title = title
     end
+
+    # Initiate game level
+    def init_game; end
+
+    #
   end
 end

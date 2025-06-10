@@ -9,6 +9,15 @@ require "colorize"
 # @version 0.2.0
 module FileUtils
   class << self
+    attr_accessor :locale
+
+    # Set program language
+    # @param lang [String] default to English(en)
+    def set_locale(lang = "en")
+      # localization target
+      @locale = lang
+    end
+
     # Return the root path.
     # @return [String] project root path
     def proj_root
@@ -79,10 +88,9 @@ module FileUtils
     # Retrieves a localized string by key path from the specified locale file.
     # Returns a missing message if the locale or key is not found.
     # @param key_path [String] e.g., "welcome.greeting"
-    # @param locale [String] set localization target
     # @param format [Symbol] set target file format, default: `:yml`
     # @return [String]
-    def get_string(key_path, locale: "en", format: :yml)
+    def get_string(key_path, format: :yml)
       path = filepath(locale, ".config", "locale")
       @strings ||= load_file(path, format: format, symbols: false)
 
@@ -101,17 +109,16 @@ module FileUtils
     # @param key_path [String] the translation key path e.g., "welcome.greeting"
     # @param swaps [Hash] performs String interpolation, placeholder: `%{adj}` e.g., `{ adj: "awesome" }`
     # @param colorize_swaps [Symbol] add coloring to interpolated strings
-    # @param locale [String] the locale to use (default: "en")
     # @param format [Symbol] set target file format, default: `:yml`
     # @return [String] the translated and interpolated string
-    def s(key_path, swaps = {}, colorize_swaps = :default, locale: "en", format: :yml)
-      str = get_string(key_path, locale: locale, format: format)
+    def s(key_path, swaps = {}, colorize_swaps = :default, color: :default, format: :yml)
+      str = get_string(key_path, format: format)
 
       swaps.each do |key, value|
         str = str.gsub(/%\{#{key}\}/, value.to_s.colorize(colorize_swaps))
       end
 
-      str
+      str.colorize(color)
     end
   end
 end

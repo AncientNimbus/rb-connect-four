@@ -3,6 +3,7 @@
 require_relative "file_utils"
 
 F = FileUtils
+String.prevent_colors = true
 
 module ConsoleGame
   # Game display & input manager for console game
@@ -63,6 +64,8 @@ module ConsoleGame
     attr_reader :commands, :game_manager
 
     def initialize(game_manager = nil)
+      F.set_locale
+      String.prevent_colors = true
       @game_manager = game_manager
       @commands = { "exit" => method(:quit), "ttfn" => method(:quit),
                     "help" => method(:help), "play" => method(:play) }
@@ -105,7 +108,7 @@ module ConsoleGame
 
       app_name = arr[0]
       if game_manager.apps.key?(app_name)
-        print_msg(F.s("console.msg.run", { app: app_name }))
+        print_msg(F.s("console.msg.run", { app: app_name }, :yellow))
 
         game_manager.apps[app_name].call
 
