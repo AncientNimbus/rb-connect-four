@@ -108,6 +108,21 @@ module FileUtils
     # Retrieves a localized string and perform String interpolation if needed.
     # @param key_path [String] the translation key path e.g., "welcome.greeting"
     # @param swaps [Hash] performs String interpolation, placeholder: `%{adj}` e.g., `{ adj: "awesome" }`
+    # @param format [Symbol] set target file format, default: `:yml`
+    # @return [String] the translated and interpolated string
+    def rs(key_path, swaps = {}, format: :yml)
+      str = get_string(key_path, format: format)
+
+      swaps.each do |key, value|
+        str = str.gsub(/%\{#{key}\}/, value.to_s)
+      end
+
+      str
+    end
+
+    # Retrieves a localized string and perform String interpolation and colorize text if needed.
+    # @param key_path [String] the translation key path e.g., "welcome.greeting"
+    # @param swaps [Hash] performs String interpolation, placeholder: `%{adj}` e.g., `{ adj: "awesome" }`
     # @param colorize_swaps [Symbol] color interpolated strings via colorize
     # @param color [Symbol] color all text via colorize
     # @param format [Symbol] set target file format, default: `:yml`
