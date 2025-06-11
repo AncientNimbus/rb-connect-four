@@ -105,10 +105,7 @@ module ConsoleGame
 
       app_name = arr[0]
       if game_manager.apps.key?(app_name)
-        print_msg(F.s("console.msg.run", { app: app_name }, :yellow))
-
         game_manager.apps[app_name].call
-
       else
         print_msg(F.s("console.msg.run_err"))
       end

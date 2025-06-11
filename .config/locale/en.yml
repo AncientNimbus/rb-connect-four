@@ -81,4 +81,5 @@ en:
     turn: "Pick a column by entering a number between 1 to 7 "
     turn_err: "Invalid input, provide a number between 1 to 7 "
     turn_reg: '\A[1-7]\z'
-    name_player: "Please name player %{num}: "
+    name_player: "Please name %{player}: "
+    greet: "Hello %{player}, welcome to %{title}! "

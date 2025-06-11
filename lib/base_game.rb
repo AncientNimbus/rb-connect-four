@@ -6,6 +6,9 @@ module ConsoleGame
     attr_reader :game_manager, :input, :title, :player
     attr_accessor :state, :game_result
 
+    # @param game_manager [ConsoleGame::GameManager]
+    # @param input [ConsoleGame::ConsoleMenu]
+    # @param title [String]
     def initialize(game_manager = nil, input = nil, title = "Base Game")
       @game_manager = game_manager
       @input = input
@@ -27,7 +30,7 @@ module ConsoleGame
     # Start the game
     def start
       self.state = :playing
-      show_initial_screen
+      show_intro
       setup_game
     end
 
@@ -71,9 +74,9 @@ module ConsoleGame
 
     def setup_game; end
 
-    def show_initial_screen
+    def show_intro
       system("clear")
-      puts "Starting #{title}..."
+      input.print_msg(F.s("console.msg.run", { app: title }, :yellow))
     end
 
     def handle_input

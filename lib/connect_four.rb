@@ -8,12 +8,15 @@ require_relative "console"
 module ConsoleGame
   # Connect Four the game
   class ConnectFour < BaseGame
-    INFO = { title: "Connect Four", ver: "v0.1.0" }.freeze
+    INFO = { title: "Connect 4", ver: "v0.1.0" }.freeze
 
-    attr_accessor :board
+    attr_reader :p1, :p2
+    attr_accessor :board, :mode
 
     def initialize(game_manager = nil, input = nil)
       super(game_manager, input, INFO[:title])
+      @p1 = game_manager.p1
+      @p2 = nil
       @col = 7
       @row = 6
     end
@@ -23,7 +26,39 @@ module ConsoleGame
     end
 
     def setup_game
-      input.handle_input(F.s("connect4.get_num"), reg: /\A[1-7]\z/, err_msg: F.s("connect4.get_num_err"))
+      # set game mode
+      game_mode
+
+      # set player profile
+      player_profile
+
+      # set game board
+
+      # enter game loop
+
+      # input.handle_input(F.s("connect4.turn"), reg: F.rs("connect4.turn_reg"), err_msg: F.s("connect4.turn_err"))
+    end
+
+    # Select game mode
+    def game_mode
+      out = input.handle_input(F.s("connect4.mode"), reg: F.rs("connect4.mode_reg"), err_msg: F.s("connect4.mode_err"))
+      self.mode = out.to_i
+    end
+
+    def player_profile
+      p1.edit_name(input.handle_input(F.s("connect4.name_player", { player: p1.name }), allow_empty: true))
+      input.print_msg(F.s("connect4.greet", { player: p1.name.capitalize, title: title }, :yellow))
+
+      return unless mode == 1
+
+      @p2 = Player.new(game_manager)
+      p2.edit_name(input.handle_input(F.s("connect4.name_player", { player: p2.name }), allow_empty: true))
+      input.print_msg(F.s("connect4.greet", { player: p2.name.capitalize, title: title }, :magenta))
+    end
+
+    def show_intro
+      super
+      input.show("connect4.boot")
     end
   end
 end

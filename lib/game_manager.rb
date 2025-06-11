@@ -25,11 +25,15 @@ module ConsoleGame
 
     # run the console game manager
     def run
-      # greet
-      menu.show("console.ver")
-      menu.show("console.menu")
+      greet
       # lobby
       menu.handle_input(allow_empty: true) while @running
+    end
+
+    def greet
+      menu.show("console.ver")
+      menu.show("console.boot")
+      menu.show("console.menu")
     end
 
     def connect_four
