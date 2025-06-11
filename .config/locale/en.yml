@@ -31,5 +31,29 @@ en:
       run: "\n* Launching %{app}..."
       run_err: "\n* Invalid launch code, please try again."
   connect4:
-    get_num: "Pick a row by entering a number between 1 to 7 "
+    boot: |
+      * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
+      * │                 o-o                               o     o  o               │
+      * │                /                                  |     |  |               │
+      * +               O      o-o  o-o   o-o   o-o   o-o  -o-    o--O               +
+      * │                \     | |  |  |  |  |  |-'  |      |        |               │
+      * │                 o-o  o-o  o  o  o  o  o-o   o-o   o        o               │
+      * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
+      * │             A Command Line Game by Ancient Nimbus | Ver: 1.0.0             │
+      * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
+      * How to play:
+      * 1. Select a game mode
+      *    • [1] Player vs Player
+      *    • [2] Player vs Computer
+      * 2. The game will randomly decide who goes first.
+      * 3. Player will each take turn to drop a colored disc into a column.
+      * 4. To drop the colored disc, enter a column number between 1 to 7.
+      * 5. Try to connect four of your discs in a row up and down (vertical), 
+      *    side to side (horizontal), or diagonally.
+      * 6. The first player to get four of their colored pieces in a row wins!
+      *    If the whole grid fills up and no one has four in a row, the game is a tie.
+    mode: "Select a game mode "
+    mode_err: "Invalid input, provide a number between 1 to 2 "
+    get_num: "Pick a column by entering a number between 1 to 7 "
     get_num_err: "Invalid input, provide a number between 1 to 7 "
+    name_player: "Please name player %{num}: "
