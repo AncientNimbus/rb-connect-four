@@ -26,12 +26,11 @@ module ConsoleGame
     # @param reg [Regexp] pattern to match
     # @param allow_empty [Boolean] allow empty input value, default to false
     # @return [String] user input
-    def prompt_user(msg = F.s("console.msg.std"), err_msg: F.s("console.msg.err"), reg: /.*/, allow_empty: false)
+    def prompt_user(msg = "", err_msg: F.s("console.msg.err"), reg: /.*/, allow_empty: false)
       input = ""
       loop do
-        print_msg(msg, mode: :print)
+        print_msg("#{msg}#{F.s('console.msg.std')}", mode: :print)
         input = gets.chomp
-        # p command?(input)
         break if input.match?(reg) && (!input.empty? || allow_empty)
 
         msg = err_msg
@@ -64,7 +63,6 @@ module ConsoleGame
     attr_reader :commands, :game_manager
 
     def initialize(game_manager = nil)
-      String.prevent_colors = true
       @game_manager = game_manager
       @commands = { "exit" => method(:quit), "ttfn" => method(:quit),
                     "help" => method(:help), "play" => method(:play) }
@@ -76,7 +74,7 @@ module ConsoleGame
     # @param err_msg [String] second print
     # @param reg [Regexp] pattern to match
     # @param allow_empty [Boolean] allow empty input value, default to false
-    def handle_input(msg = F.s("console.msg.std"), err_msg: F.s("console.msg.err"), reg: /.*/, allow_empty: false)
+    def handle_input(msg = "", err_msg: F.s("console.msg.err"), reg: /.*/, allow_empty: false)
       input = prompt_user(msg, err_msg: err_msg, reg: reg, allow_empty: allow_empty)
       return input if input.empty?
 

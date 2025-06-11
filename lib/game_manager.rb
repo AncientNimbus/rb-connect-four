@@ -15,6 +15,7 @@ module ConsoleGame
 
     def initialize(lang: "en")
       FileUtils.set_locale(lang)
+      String.prevent_colors = true
       @running = true
       @apps = { "connect4" => method(:connect_four) }
       @menu = ConsoleMenu.new(self)
@@ -32,7 +33,7 @@ module ConsoleGame
     end
 
     def connect_four
-      self.active_game = ConnectFour.new(self)
+      self.active_game = ConnectFour.new(self, menu)
       active_game.start
     end
   end

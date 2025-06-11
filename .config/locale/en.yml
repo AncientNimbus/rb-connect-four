@@ -24,8 +24,12 @@ en:
     exit: "\n* ~~Bye~~"
     cmd_err: "Invalid commands, type --help to see all available commands."
     msg:
+      msg: "Provide an input: "
       std: ">>> "
       err: "Invalid input, please try again: "
       gm_err: "No game manager available"
       run: "\n* Launching %{app}..."
       run_err: "\n* Invalid launch code, please try again."
+  connect4:
+    get_num: "Pick a row by entering a number between 1 to 7 "
+    get_num_err: "Invalid input, provide a number between 1 to 7 "
