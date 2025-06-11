@@ -2,6 +2,27 @@
 en:
   console:
     ver: "|<<<───────────────|⟡ Ruby Arcade ⟡ v0.2.0 by Ancient Nimbus|───────────────>>>|"
+    boot: |
+      * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
+      * │                                     *                                      │ 
+      * │                                    ***                                     │
+      * │                                   *****                                    │
+      * │                                 *********                                  │
+      * │                               *************                                │
+      * │                             *****************                              │
+      * │                               *************                                │
+      * │                                 *********                                  │
+      * │                                   *****                                    │
+      * │                                    ***                                     │
+      * │                                     *                                      │
+      * │           ___       ___       ___       ___       ___       ___            │
+      * │          /\  \     /\  \     /\  \     /\  \     /\  \     /\  \           │
+      * │         /::\  \   /::\  \   /::\  \   /::\  \   /::\  \   /::\  \          │
+      * +        /::\:\__\ /::\:\__\ /:/\:\__\ /::\:\__\ /:/\:\__\ /::\:\__\         │
+      * │        \/\::/  / \;:::/  / \:\ \/__/ \/\::/  / \:\/:/  / \:\:\/  /         │
+      * │          /:/  /   |:\/__/   \:\__\     /:/  /   \::/  /   \:\/  /          │
+      * │          \/__/     \|__|     \/__/     \/__/     \/__/     \/__/           │
+      * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
     menu: |
       * Welcome to ⟡ Ruby Arcade ⟡
       *
@@ -39,6 +60,8 @@ en:
       * │                \     | |  |  |  |  |  |-'  |      |        |               │
       * │                 o-o  o-o  o  o  o  o  o-o   o-o   o        o               │
       * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
+      * │                                 Connect  4                                 │
+      * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
       * │             A Command Line Game by Ancient Nimbus | Ver: 1.0.0             │
       * +──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+──────+
       * How to play:
@@ -54,6 +77,8 @@ en:
       *    If the whole grid fills up and no one has four in a row, the game is a tie.
     mode: "Select a game mode "
     mode_err: "Invalid input, provide a number between 1 to 2 "
-    get_num: "Pick a column by entering a number between 1 to 7 "
-    get_num_err: "Invalid input, provide a number between 1 to 7 "
+    mode_reg: '\A[1-2]\z'
+    turn: "Pick a column by entering a number between 1 to 7 "
+    turn_err: "Invalid input, provide a number between 1 to 7 "
+    turn_reg: '\A[1-7]\z'
     name_player: "Please name player %{num}: "
