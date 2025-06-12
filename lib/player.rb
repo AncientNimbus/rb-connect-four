@@ -21,6 +21,11 @@ module ConsoleGame
         @number_of_player
       end
 
+      # Setup color array and remove unwanted color options
+      def setup_color
+        %i[default gray].each { |elem| remove_color(elem) }
+      end
+
       # @param color [Symbol]
       def remove_color(color)
         @colors.delete(color)
@@ -31,6 +36,7 @@ module ConsoleGame
 
     def initialize(game_manager = nil, name = "")
       @game_manager = game_manager
+      Player.setup_color
       Player.add_player
       @name = edit_name(name)
       @moves = []
