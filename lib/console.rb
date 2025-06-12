@@ -3,7 +3,6 @@
 require_relative "file_utils"
 
 F = FileUtils
-String.prevent_colors = true
 
 module ConsoleGame
   # Game display & input manager for console game

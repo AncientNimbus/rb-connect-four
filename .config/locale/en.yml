@@ -85,3 +85,6 @@ en:
     turn_reg: '\A[1-7]\z'
     name_player: "Please name %{player}: "
     greet: "Hello %{player}, welcome to %{title}! "
+    default:
+      player_name: "Player %{num}"
+      ai_name: "Computer"

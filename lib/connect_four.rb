@@ -30,10 +30,7 @@ module ConsoleGame
       game_mode
 
       # set player profile
-      return unless mode == 1
-
-      player_profile(p1)
-      player_profile(p2)
+      player_setup
 
       # set game board
 
@@ -52,10 +49,24 @@ module ConsoleGame
     # @param player [ConsoleGame::Player] player class object
     # @param player_color [Symbol] string coloring on console output, default value selects a random color
     def player_profile(player, player_color = String.colors.sample)
-      player = Player.new if player.nil?
-      player.edit_name(input.handle_input(F.s("connect4.name_player", { player: "Player #{player.class.total_player}" }),
+      if player.nil?
+        player = mode == 1 ? Player.new(game_manager, "", player_color) : Computer.new(game_manager)
+        return player if player.is_a?(Computer)
+      end
+      player.edit_name(input.handle_input(F.s("connect4.name_player", { player: player.edit_name }),
                                           allow_empty: true))
-      input.print_msg(F.s("connect4.greet", { player: player.name, title: title }, player_color))
+      greet(player)
+      player
+    end
+
+    # Player setup depending on chosen game mode
+    def player_setup
+      player_profile(p1)
+      @p2 = player_profile(p2)
+    end
+
+    def greet(player)
+      input.print_msg(F.s("connect4.greet", { player: player.name, title: title }))
     end
 
     def show_intro
