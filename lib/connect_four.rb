@@ -44,7 +44,6 @@ module ConsoleGame
       # set game board
       generate_board
       print_board
-
       # enter game loop
 
       # input.handle_input(F.s("connect4.turn"), reg: F.rs("connect4.turn_reg"), err_msg: F.s("connect4.turn_err"))
@@ -57,10 +56,18 @@ module ConsoleGame
       @board = Array.new(@row) { Array.new(@col, e_slot) }
     end
 
+    def update_board
+      # testing visual...
+      30.times do
+        board[rand(6)][rand(5)] = f_slot.colorize([p1, p2].sample.player_color)
+      end
+    end
+
     # Print game board to console
     def print_board
+      update_board
       input.print_msg(board_cap, pre: "* ")
-      board.each do |row|
+      board.reverse_each do |row|
         input.print_msg(row.join(" #{sep} "), pre: "* #{sep} ", suf: " #{sep}")
       end
       input.print_msg(board_low, pre: "* ")
@@ -106,7 +113,6 @@ module ConsoleGame
 end
 
 # core game loop
-# display a grid that's 7-column and 6-row
 # prompt user1 for an input between 1-7, where 1 is the first column on the left, and 7 is the last column on the right
 # when a valid input is received, update the column to reflect user's choice.
 # print a new display to reflect the changes
