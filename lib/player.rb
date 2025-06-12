@@ -31,6 +31,7 @@ module ConsoleGame
         @colors.delete(color)
       end
     end
+
     attr_reader :name
     attr_accessor :moves, :player_color
 

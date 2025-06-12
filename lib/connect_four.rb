@@ -10,33 +10,60 @@ module ConsoleGame
   class ConnectFour < BaseGame
     INFO = { title: "Connect 4", ver: "v0.1.0" }.freeze
 
-    attr_reader :p1, :p2
+    attr_reader :p1, :p2, :board_cap, :board_low, :sep, :e_slot, :f_slot
     attr_accessor :board, :mode
 
     def initialize(game_manager = nil, input = nil)
       super(game_manager, input, INFO[:title])
       @p1 = game_manager.p1
       @p2 = nil
-      @col = 7
-      @row = 6
+
+      # Board asset: cap
+      @board_cap ||= fetch_board_asset("cap")
+      # Board asset: low
+      @board_low ||= fetch_board_asset("low")
+      # Board asset: separator
+      @sep ||= fetch_board_asset("sep")
+      # Board asset: empty slot
+      @e_slot ||= fetch_board_asset("hollow")
+      # Board asset: filled slot
+      @f_slot ||= fetch_board_asset("filled")
     end
 
-    def generate_board
-      @board = Array.new(@row) { Array.new(@col, 0) }
+    # Fetch board asset from textfile
+    def fetch_board_asset(element)
+      F.rs("connect4.board.#{element}")
     end
 
+    # Sequence to setup game board
     def setup_game
       # set game mode
       game_mode
-
       # set player profile
       player_setup
-
       # set game board
+      generate_board
+      print_board
 
       # enter game loop
 
       # input.handle_input(F.s("connect4.turn"), reg: F.rs("connect4.turn_reg"), err_msg: F.s("connect4.turn_err"))
+    end
+
+    # Generate game board as array
+    def generate_board
+      @col = 7
+      @row = 6
+      @board = Array.new(@row) { Array.new(@col, e_slot) }
+    end
+
+    # Print game board to console
+    def print_board
+      input.print_msg(board_cap, pre: "* ")
+      board.each do |row|
+        input.print_msg(row.join(" #{sep} "), pre: "* #{sep} ", suf: " #{sep}")
+      end
+      input.print_msg(board_low, pre: "* ")
     end
 
     # Select game mode
@@ -47,14 +74,13 @@ module ConsoleGame
 
     # Set up player profile
     # @param player [ConsoleGame::Player] player class object
-    # @param player_color [Symbol] string coloring on console output, default value selects a random color
-    def player_profile(player, player_color = String.colors.sample)
+    # @return [ConsoleGame::Player, ConsoleGame::Computer]
+    def player_profile(player)
       if player.nil?
-        player = mode == 1 ? Player.new(game_manager, "", player_color) : Computer.new(game_manager)
+        player = mode == 1 ? Player.new(game_manager, "") : Computer.new(game_manager)
         return player if player.is_a?(Computer)
       end
-      player.edit_name(input.handle_input(F.s("connect4.name_player", { player: player.edit_name }),
-                                          allow_empty: true))
+      player.edit_name(input.handle_input(F.s("connect4.name_player", { player: player.edit_name }), allow_empty: true))
       greet(player)
       player
     end
@@ -65,10 +91,13 @@ module ConsoleGame
       @p2 = player_profile(p2)
     end
 
+    # Greet user
+    # @param player [ConsoleGame::Player] player class object
     def greet(player)
       input.print_msg(F.s("connect4.greet", { player: player.name, title: title }))
     end
 
+    # Print game intro
     def show_intro
       super
       input.show("connect4.boot")
