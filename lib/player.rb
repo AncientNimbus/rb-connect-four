@@ -7,7 +7,7 @@ module ConsoleGame
   # Player class
   class Player
     @number_of_player = 0
-    @colors = String.colors[8..]
+    @colors = String.colors[8..15]
     class << self
       attr_reader :colors
 

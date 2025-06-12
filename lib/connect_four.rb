@@ -41,6 +41,7 @@ module ConsoleGame
       game_mode
       # set player profile
       player_setup
+      greet(p1, p2)
       # set game board
       generate_board
       print_board
@@ -77,6 +78,7 @@ module ConsoleGame
     def game_mode
       out = input.handle_input(F.s("connect4.mode"), reg: F.rs("connect4.mode_reg"), err_msg: F.s("connect4.mode_err"))
       self.mode = out.to_i
+      input.print_msg(F.s("connect4.#{mode == 1 ? 'mode_pvp' : 'mode_pve'}"), pre: "* ")
     end
 
     # Set up player profile
@@ -88,7 +90,6 @@ module ConsoleGame
         return player if player.is_a?(Computer)
       end
       player.edit_name(input.handle_input(F.s("connect4.name_player", { player: player.edit_name }), allow_empty: true))
-      greet(player)
       player
     end
 
@@ -99,9 +100,11 @@ module ConsoleGame
     end
 
     # Greet user
-    # @param player [ConsoleGame::Player] player class object
-    def greet(player)
-      input.print_msg(F.s("connect4.greet", { player: player.name, title: title }))
+    # @param player1 [ConsoleGame::Player] player class object
+    # @param player2 [ConsoleGame::Player, ConsoleGame::Computer] player class or computer class object
+    def greet(player1, player2)
+      input.print_msg(F.s("connect4.#{mode == 1 ? 'greet_pvp' : 'greet_pve'}",
+                          { p1: player1.name, p2: player2.name, title: title }))
     end
 
     # Print game intro
