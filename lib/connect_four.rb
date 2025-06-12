@@ -30,7 +30,10 @@ module ConsoleGame
       game_mode
 
       # set player profile
-      player_profile
+      return unless mode == 1
+
+      player_profile(p1)
+      player_profile(p2)
 
       # set game board
 
@@ -45,15 +48,14 @@ module ConsoleGame
       self.mode = out.to_i
     end
 
-    def player_profile
-      p1.edit_name(input.handle_input(F.s("connect4.name_player", { player: p1.name }), allow_empty: true))
-      input.print_msg(F.s("connect4.greet", { player: p1.name.capitalize, title: title }, :yellow))
-
-      return unless mode == 1
-
-      @p2 = Player.new(game_manager)
-      p2.edit_name(input.handle_input(F.s("connect4.name_player", { player: p2.name }), allow_empty: true))
-      input.print_msg(F.s("connect4.greet", { player: p2.name.capitalize, title: title }, :magenta))
+    # Set up player profile
+    # @param player [ConsoleGame::Player] player class object
+    # @param player_color [Symbol] string coloring on console output, default value selects a random color
+    def player_profile(player, player_color = String.colors.sample)
+      player = Player.new if player.nil?
+      player.edit_name(input.handle_input(F.s("connect4.name_player", { player: "Player #{player.class.total_player}" }),
+                                          allow_empty: true))
+      input.print_msg(F.s("connect4.greet", { player: player.name, title: title }, player_color))
     end
 
     def show_intro

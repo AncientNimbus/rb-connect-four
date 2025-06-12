@@ -67,7 +67,7 @@ en:
       * How to play:
       * 1. Select a game mode
       *    • [1] Player vs Player
-      *    • [2] Player vs Computer
+      *    • [2] Player vs Computer (Coming soon!)
       * 2. The game will randomly decide who goes first.
       * 3. Player will each take turn to drop a colored disc into a column.
       * 4. To drop the colored disc, enter a column number between 1 to 7.
@@ -76,8 +76,10 @@ en:
       * 6. The first player to get four of their colored pieces in a row wins!
       *    If the whole grid fills up and no one has four in a row, the game is a tie.
     mode: "Select a game mode "
-    mode_err: "Invalid input, provide a number between 1 to 2 "
-    mode_reg: '\A[1-2]\z'
+    # mode_err: "Invalid input, provide a number between 1 to 2 "
+    mode_err: "Invalid input, only mode 1 is currently available. "
+    # mode_reg: '\A[1-2]\z'
+    mode_reg: '\A[1]\z'
     turn: "Pick a column by entering a number between 1 to 7 "
     turn_err: "Invalid input, provide a number between 1 to 7 "
     turn_reg: '\A[1-7]\z'
