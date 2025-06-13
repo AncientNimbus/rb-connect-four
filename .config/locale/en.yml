@@ -106,3 +106,4 @@ en:
       err: "Invalid input, provide a number between 1 to 7 "
       reg: '\A[1-7]\z'
       msg1: "%{player}'s turn: "
+      col_err: "Column %{col} is full, pick another one!"
