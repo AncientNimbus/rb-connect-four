@@ -46,8 +46,13 @@ module ConsoleGame
       generate_board
       print_board
       # enter game loop
+      game_loop
+    end
+
+    # core game loop
+    def game_loop
       toss_a_coin
-      play_turn until remaining_slots == 0
+      play_turn until remaining_slots.zero?
     end
 
     # Decide who is starting first
@@ -66,11 +71,13 @@ module ConsoleGame
     def play_turn
       player = p1_turn ? p1 : p2
       input.print_msg(F.s("connect4.turn.msg1", { player: player.name }), mode: :print)
+
       user_col = player_choice
-      p user_col
-      update_board(player, user_col, 0)
+
+      valid_move = update_board(player, user_col, 0)
       print_board
-      self.p1_turn = !p1_turn
+
+      self.p1_turn = !p1_turn if valid_move
     end
 
     # Get column value from player
@@ -88,6 +95,7 @@ module ConsoleGame
     # count remaining slots
     def remaining_slots
       @empty_slots = board.flatten.count(e_slot)
+      # p board.flatten
       empty_slots
     end
 
@@ -95,10 +103,12 @@ module ConsoleGame
     # @param player [ConsoleGame::Player, ConsoleGame::Computer]
     # @param col [Integer] column number
     def update_board(player, col, row)
-      return puts "column is full" if row == 6
+      return input.print_msg(F.s("connect4.turn.col_err", { col: col }), pre: "* ") if row == 6
 
-      if board[row][col - 1] == e_slot
-        board[row][col - 1 ] = f_slot.colorize(player.player_color)
+      real_col = col - 1
+      if board[row][real_col] == e_slot
+        board[row][real_col] = f_slot.colorize(player.player_color)
+        true
       else
         row += 1
         update_board(player, col, row)
