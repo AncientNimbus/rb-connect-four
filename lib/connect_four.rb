@@ -85,20 +85,18 @@ module ConsoleGame
       @col = 7
       @row = 6
       @board = Array.new(@row) { Array.new(@col, e_slot) }
-      p board
     end
 
     # Update game board
     # @param player [ConsoleGame::Player, ConsoleGame::Computer]
     # @param col [Integer] column number
     def update_board(player, col, row)
-      # testing visual...
-      # 30.times do
-      #   board[rand(6)][rand(5)] = f_slot.colorize([p1, p2].sample.player_color)
-      # end
+      return puts "column is full" if row == 6
+
       if board[row][col - 1] == e_slot
         board[row][col - 1 ] = f_slot.colorize(player.player_color)
-      elsif row < 7
+        p board
+      else
         row += 1
         update_board(player, col, row)
       end
