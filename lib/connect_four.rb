@@ -10,7 +10,7 @@ module ConsoleGame
   class ConnectFour < BaseGame
     INFO = { title: "Connect 4", ver: "v0.1.0" }.freeze
 
-    attr_reader :p1, :p2, :board_cap, :board_low, :sep, :e_slot, :f_slot
+    attr_reader :p1, :p2, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn
 
     def initialize(game_manager = nil, input = nil)
@@ -47,9 +47,7 @@ module ConsoleGame
       print_board
       # enter game loop
       toss_a_coin
-      20.times do
-        play_turn
-      end
+      play_turn until remaining_slots == 0
     end
 
     # Decide who is starting first
@@ -87,6 +85,12 @@ module ConsoleGame
       @board = Array.new(@row) { Array.new(@col, e_slot) }
     end
 
+    # count remaining slots
+    def remaining_slots
+      @empty_slots = board.flatten.count(e_slot)
+      empty_slots
+    end
+
     # Update game board
     # @param player [ConsoleGame::Player, ConsoleGame::Computer]
     # @param col [Integer] column number
@@ -95,7 +99,6 @@ module ConsoleGame
 
       if board[row][col - 1] == e_slot
         board[row][col - 1 ] = f_slot.colorize(player.player_color)
-        p board
       else
         row += 1
         update_board(player, col, row)
