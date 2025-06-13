@@ -97,7 +97,7 @@ en:
       hollow: "◯"
       filled: "⏺︎"
     pregame:
-      msg1: "Whenever you are ready, hit 'enter' to toss a coin to see who goes first..."
+      msg1: "Whenever you are ready, hit 'enter' to toss a coin and see who goes first..."
       msg2: "Flipping a coin..."
       msg3: "%{player} will go first."
     game:

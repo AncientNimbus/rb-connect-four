@@ -11,7 +11,7 @@ module ConsoleGame
     INFO = { title: "Connect 4", ver: "v0.1.0" }.freeze
 
     attr_reader :p1, :p2, :board_cap, :board_low, :sep, :e_slot, :f_slot
-    attr_accessor :board, :mode
+    attr_accessor :board, :mode, :p1_turn
 
     def initialize(game_manager = nil, input = nil)
       super(game_manager, input, INFO[:title])
@@ -46,8 +46,25 @@ module ConsoleGame
       generate_board
       print_board
       # enter game loop
+      toss_a_coin
+      p p1_turn
 
       # input.handle_input(F.s("connect4.turn"), reg: F.rs("connect4.turn_reg"), err_msg: F.s("connect4.turn_err"))
+    end
+
+    # Decide who is starting first
+    def toss_a_coin
+      input.std_show("connect4.pregame.msg1")
+      input.handle_input(allow_empty: true)
+      input.std_show("connect4.pregame.msg2")
+      @p1_turn = [true, false].sample
+      sleep(1.3)
+      input.print_msg(F.s("connect4.pregame.msg3", { player: p1_turn ? p1.name : p2.name }))
+    end
+
+    # Play turn
+    def play_turn
+      self.p1_turn = !p1_turn
     end
 
     # Generate game board as array

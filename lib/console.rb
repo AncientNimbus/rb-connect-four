@@ -93,6 +93,13 @@ module ConsoleGame
       print_msg(F.s(str))
     end
 
+    # Display with added prefix
+    # @param str [String] textfile key
+    # @param pre [String] message prefix
+    def std_show(str, pre: "* ")
+      print_msg(F.s(str), pre: pre)
+    end
+
     def help(_arr = [])
       show("console.help")
     end
