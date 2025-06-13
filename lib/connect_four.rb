@@ -47,24 +47,37 @@ module ConsoleGame
       print_board
       # enter game loop
       toss_a_coin
-      p p1_turn
-
-      # input.handle_input(F.s("connect4.turn"), reg: F.rs("connect4.turn_reg"), err_msg: F.s("connect4.turn_err"))
+      20.times do
+        play_turn
+      end
     end
 
     # Decide who is starting first
     def toss_a_coin
       input.std_show("connect4.pregame.msg1")
       input.handle_input(allow_empty: true)
+
       input.std_show("connect4.pregame.msg2")
       @p1_turn = [true, false].sample
+
       sleep(1.3)
-      input.print_msg(F.s("connect4.pregame.msg3", { player: p1_turn ? p1.name : p2.name }))
+      input.print_msg(F.s("connect4.pregame.msg3", { player: p1_turn ? p1.name : p2.name }), pre: "* ")
     end
 
     # Play turn
     def play_turn
+      player = p1_turn ? p1 : p2
+      input.print_msg(F.s("connect4.turn.msg1", { player: player.name }), mode: :print)
+      user_col = player_choice
+      p user_col
+      update_board(player, user_col, 0)
+      print_board
       self.p1_turn = !p1_turn
+    end
+
+    # Get column value from player
+    def player_choice
+      input.handle_input(reg: F.rs("connect4.turn.reg"), err_msg: F.s("connect4.turn.err")).to_i
     end
 
     # Generate game board as array
@@ -72,18 +85,28 @@ module ConsoleGame
       @col = 7
       @row = 6
       @board = Array.new(@row) { Array.new(@col, e_slot) }
+      p board
     end
 
-    def update_board
+    # Update game board
+    # @param player [ConsoleGame::Player, ConsoleGame::Computer]
+    # @param col [Integer] column number
+    def update_board(player, col, row)
       # testing visual...
-      30.times do
-        board[rand(6)][rand(5)] = f_slot.colorize([p1, p2].sample.player_color)
+      # 30.times do
+      #   board[rand(6)][rand(5)] = f_slot.colorize([p1, p2].sample.player_color)
+      # end
+      if board[row][col - 1] == e_slot
+        board[row][col - 1 ] = f_slot.colorize(player.player_color)
+      elsif row < 7
+        row += 1
+        update_board(player, col, row)
       end
     end
 
     # Print game board to console
     def print_board
-      update_board
+      # update_board
       input.print_msg(board_cap, pre: "* ")
       board.reverse_each do |row|
         input.print_msg(row.join(" #{sep} "), pre: "* #{sep} ", suf: " #{sep}")
@@ -122,6 +145,9 @@ module ConsoleGame
     def greet(player1, player2)
       input.print_msg(F.s("connect4.#{mode == 1 ? 'greet_pvp' : 'greet_pve'}",
                           { p1: player1.name, p2: player2.name, title: title }))
+      [player1, player2].each do |player|
+        input.print_msg(F.s("connect4.assignment", { player: player.name, disc: f_slot.colorize(player.player_color) }))
+      end
     end
 
     # Print game intro

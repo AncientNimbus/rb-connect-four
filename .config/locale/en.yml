@@ -73,7 +73,7 @@ en:
       * 4. To drop the colored disc, enter a column number between 1 to 7.
       * 5. Try to connect four of your discs in a row up and down (vertical), 
       *    side to side (horizontal), or diagonally.
-      * 6. The first player to get four of their colored pieces in a row wins!
+      * 6. The first player to get four of their colored discs in a row wins!
       *    If the whole grid fills up and no one has four in a row, the game is a tie.
     mode: "Select a game mode "
     mode_err: "Invalid input, provide a number between 1 to 2 "
@@ -84,8 +84,9 @@ en:
     mode_pve: "Player vs Computer mode selected"
     name_player: "Please name %{player}: "
     greet: "Hello %{player}, welcome to %{title}! "
-    greet_pvp: "* Welcome to %{title}, %{p1} and %{p2}."
+    greet_pvp: "* Welcome to %{title}, %{p1} and %{p2}!"
     greet_pve: "* Welcome to %{title}, %{p1}! You will face the mighty %{p2} today."
+    assignment: "* %{player} will play as %{disc}"
     default:
       player_name: "Player %{num}"
       ai_name: "Computer"
@@ -99,8 +100,9 @@ en:
     pregame:
       msg1: "Whenever you are ready, hit 'enter' to toss a coin and see who goes first..."
       msg2: "Flipping a coin..."
-      msg3: "%{player} will go first."
-    game:
-      turn: "Pick a column by entering a number between 1 to 7 "
-      turn_err: "Invalid input, provide a number between 1 to 7 "
-      turn_reg: '\A[1-7]\z'
+      msg3: "%{player} goes first..."
+    turn:
+      msg: "Pick a column by entering a number between 1 to 7 "
+      err: "Invalid input, provide a number between 1 to 7 "
+      reg: '\A[1-7]\z'
+      msg1: "%{player}'s turn: "
