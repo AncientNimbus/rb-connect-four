@@ -33,14 +33,14 @@ module ConsoleGame
     end
 
     attr_reader :name
-    attr_accessor :moves, :player_color
+    attr_accessor :data, :player_color
 
     def initialize(game_manager = nil, name = "")
       @game_manager = game_manager
       Player.setup_color
       Player.add_player
       @name = edit_name(name)
-      @moves = []
+      @data = {}
       @player_color = Player.remove_color(Player.colors.sample)
     end
 
