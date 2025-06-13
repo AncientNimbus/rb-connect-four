@@ -72,17 +72,26 @@ module ConsoleGame
       player = p1_turn ? p1 : p2
       input.print_msg(F.s("connect4.turn.msg1", { player: player.name }), mode: :print)
 
-      user_col = player_choice
+      user_col = player_choice(player)
 
-      valid_move = update_board(player, user_col, 0)
+      valid_move = update_board(player, user_col)
       print_board
 
       self.p1_turn = !p1_turn if valid_move
     end
 
     # Get column value from player
-    def player_choice
-      input.handle_input(reg: F.rs("connect4.turn.reg"), err_msg: F.s("connect4.turn.err")).to_i
+    # @param player [ConsoleGame::Player, ConsoleGame::Computer]
+    # @return [Integer]
+    def player_choice(player)
+      value = nil
+      if player.is_a?(Computer)
+        value = player.random_move(empty_slots)
+        print value
+      else
+        value = input.handle_input(reg: F.rs("connect4.turn.reg"), err_msg: F.s("connect4.turn.err")).to_i
+      end
+      value
     end
 
     # Generate game board as array
@@ -94,20 +103,22 @@ module ConsoleGame
 
     # count remaining slots
     def remaining_slots
-      @empty_slots = board.flatten.count(e_slot)
-      # p board.flatten
-      empty_slots
+      @empty_slots = []
+      board.flatten.each_with_index { |elem, idx| empty_slots.push(idx) if elem == e_slot }
+      # p empty_slots.size
+      empty_slots.size
     end
 
     # Update game board
     # @param player [ConsoleGame::Player, ConsoleGame::Computer]
-    # @param col [Integer] column number
-    def update_board(player, col, row)
+    # @param col [Integer] column number from input
+    # @param row [Integer] expecting value to starts from 0
+    def update_board(player, col, row = 0)
       return input.print_msg(F.s("connect4.turn.col_err", { col: col }), pre: "* ") if row == 6
 
       real_col = col - 1
       if board[row][real_col] == e_slot
-        board[row][real_col] = f_slot.colorize(player.player_color)
+        process_move(player, real_col, row)
         true
       else
         row += 1
@@ -115,10 +126,14 @@ module ConsoleGame
       end
     end
 
+    # Data process when move is valid
+    def process_move(player, col, row)
+      board[row][col] = f_slot.colorize(player.player_color)
+    end
+
     # Print game board to console
     def print_board
-      # update_board
-      input.print_msg(board_cap, pre: "* ")
+      input.print_msg(board_cap, pre: "\n* ")
       board.reverse_each do |row|
         input.print_msg(row.join(" #{sep} "), pre: "* #{sep} ", suf: " #{sep}")
       end
@@ -170,9 +185,6 @@ module ConsoleGame
 end
 
 # core game loop
-# prompt user1 for an input between 1-7, where 1 is the first column on the left, and 7 is the last column on the right
-# when a valid input is received, update the column to reflect user's choice.
-# print a new display to reflect the changes
 # user2 or npc will take their turn
 # repeat the column update process
 # the game ends when a player placed four discs that are connected either vertically, horizontally or diagonally.

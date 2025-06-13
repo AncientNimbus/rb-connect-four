@@ -58,5 +58,10 @@ module ConsoleGame
     def initialize(game_manager = nil, name = F.rs("connect4.default.ai_name"))
       super(game_manager, name)
     end
+
+    # Returns a random integer between 1 to 7
+    def random_move(empty_slots)
+      (empty_slots.sample % 7) + 1
+    end
   end
 end
