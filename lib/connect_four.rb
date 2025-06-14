@@ -122,9 +122,9 @@ module ConsoleGame
     # @return [Array<Integer>] array of numbers
     def horizontal(value, direction = :f, combination = nil, length: 4, bound: 6)
       combination ||= [value]
-      return combination if combination.size == length
-
       arr_size = combination.size
+      return combination if arr_size == length
+
       next_value = case direction
                    when :f then (value + arr_size) % bound
                    when :b then (value - arr_size) % bound
