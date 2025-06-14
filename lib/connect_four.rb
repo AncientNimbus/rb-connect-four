@@ -9,6 +9,16 @@ module ConsoleGame
   # Connect Four the game
   class ConnectFour < BaseGame
     INFO = { title: "Connect 4", ver: "v0.5.4" }.freeze
+    DIRECTIONS = {
+      n: ->(value, step, bound) { value + bound * step },
+      ne: ->(value, step, bound) { value + bound * step + step },
+      e: ->(value, step, _bound) { value + step },
+      se: ->(value, step, bound) { value - bound * step + step },
+      s: ->(value, step, bound) { value - bound * step },
+      sw: ->(value, step, bound) { value - bound * step - step },
+      w: ->(value, step, _bound) { value - step },
+      nw: ->(value, step, bound) { value + bound * step - step }
+    }.freeze
 
     attr_reader :p1, :p2, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn
@@ -113,27 +123,33 @@ module ConsoleGame
       # end
     end
 
-    # Recursively find the next horizontal value
+    # Recursively find the next value depending on direction
     # @param value [Integer] start value
-    # @param direction [Symbol] :f for forward and :b for backward
+    # @param direction [Symbol] see DIRECTIONS for available options. E.g., :e for count from left to right
     # @param combination [Array<Integer>] default value is an empty array
     # @param length [Integer] expected array length
-    # @param bound [Integer] row limit
+    # @param bound [Array<Integer>] row limit
     # @return [Array<Integer>] array of numbers
-    def horizontal(value, direction = :f, combination = nil, length: 4, bound: 6)
+    def direction(value = 0, direction = :e, combination = nil, length: 4, bound: [7, 6])
+      row, col = bound
       combination ||= [value]
       arr_size = combination.size
       return combination if arr_size == length
 
-      next_value = case direction
-                   when :f then (value + arr_size) % bound
-                   when :b then (value - arr_size) % bound
-                   else raise "Invalid direction: #{direction}"
-                   end
+      next_value = DIRECTIONS.fetch(direction) do |key|
+        raise "Invalid direction: #{key}"
+      end.call(value, arr_size, row)
 
-      return [] if direction == :f ? next_value < combination.last : next_value > combination.last
+      max_position = row * col - 1
+      return [] if next_value.negative? || next_value > max_position
 
-      horizontal(value, direction, combination + [next_value], length: length, bound: bound)
+      if arr_size > 1 && %i[e w ne nw se sw].include?(direction)
+        abs_v = ((value % row - combination.last % row).abs - arr_size).abs
+        return [] if abs_v != 1
+
+      end
+
+      direction(value, direction, combination + [next_value], length: length, bound: bound)
     end
 
     # count remaining slots
