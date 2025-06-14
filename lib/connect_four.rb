@@ -114,15 +114,25 @@ module ConsoleGame
     end
 
     # Recursively find the next horizontal value
-    def horizontal(value, direction = :r, combination = [], length = 4)
+    # @param value [Integer] start value
+    # @param direction [Symbol] :f for forward and :b for backward
+    # @param combination [Array<Integer>] default value is an empty array
+    # @param length [Integer] expected array length
+    # @param bound [Integer] row limit
+    # @return [Array<Integer>] array of numbers
+    def horizontal(value, direction, combination = [], length = 4, bound = 6)
       return combination if combination.size == length
 
-      combination.push(value) if combination.empty?
-      if direction == :r
-        combination.push(value + (1 * combination.size))
-      elsif direction == :l
-        combination.push(value - (1 * combination.size))
-      end
+      combination << value if combination.empty?
+      next_value = case direction
+                   when :f then (value + combination.size) % bound
+                   when :b then (value - combination.size) % bound
+                   else raise "Invalid direction: #{direction}"
+                   end
+
+      return [] if direction == :f ? next_value < combination.last : next_value > combination.last
+
+      combination << next_value
       horizontal(value, direction, combination)
     end
 
