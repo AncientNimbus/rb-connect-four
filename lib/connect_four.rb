@@ -8,9 +8,9 @@ require_relative "console"
 module ConsoleGame
   # Connect Four the game
   class ConnectFour < BaseGame
-    INFO = { title: "Connect 4", ver: "v0.1.0" }.freeze
+    INFO = { title: "Connect 4", ver: "v0.5.4" }.freeze
 
-    attr_reader :p1, :p2, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
+    attr_reader :p1, :p2, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn
 
     def initialize(game_manager = nil, input = nil)
@@ -28,6 +28,9 @@ module ConsoleGame
       @e_slot ||= fetch_board_asset("hollow")
       # Board asset: filled slot
       @f_slot ||= fetch_board_asset("filled")
+
+      winning_combos
+      p combinations
     end
 
     # Fetch board asset from textfile
@@ -88,6 +91,7 @@ module ConsoleGame
       if player.is_a?(Computer)
         value = player.random_move(empty_slots)
         print value
+        puts
       else
         value = input.handle_input(reg: F.rs("connect4.turn.reg"), err_msg: F.s("connect4.turn.err")).to_i
       end
@@ -101,11 +105,32 @@ module ConsoleGame
       @board = Array.new(@row) { Array.new(@col, e_slot) }
     end
 
+    # calculate winning combinations
+    def winning_combos
+      @combinations = {}
+      # 42.times do |idx|
+      #   combinations[idx] = [123]
+      # end
+    end
+
+    # Recursively find the next horizontal value
+    def horizontal(value, direction = :r, combination = [], length = 4)
+      return combination if combination.size == length
+
+      combination.push(value) if combination.empty?
+      if direction == :r
+        combination.push(value + (1 * combination.size))
+      elsif direction == :l
+        combination.push(value - (1 * combination.size))
+      end
+      horizontal(value, direction, combination)
+    end
+
     # count remaining slots
     def remaining_slots
       @empty_slots = []
       board.flatten.each_with_index { |elem, idx| empty_slots.push(idx) if elem == e_slot }
-      # p empty_slots.size
+
       empty_slots.size
     end
 
@@ -133,11 +158,12 @@ module ConsoleGame
 
     # Print game board to console
     def print_board
-      input.print_msg(board_cap, pre: "\n* ")
+      input.print_msg(board_cap, pre: "* ")
       board.reverse_each do |row|
         input.print_msg(row.join(" #{sep} "), pre: "* #{sep} ", suf: " #{sep}")
       end
       input.print_msg(board_low, pre: "* ")
+      puts
     end
 
     # Select game mode
@@ -185,8 +211,6 @@ module ConsoleGame
 end
 
 # core game loop
-# user2 or npc will take their turn
-# repeat the column update process
 # the game ends when a player placed four discs that are connected either vertically, horizontally or diagonally.
 # announce winner
 # prompt restart
