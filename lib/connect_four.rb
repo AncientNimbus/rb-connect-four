@@ -120,20 +120,20 @@ module ConsoleGame
     # @param length [Integer] expected array length
     # @param bound [Integer] row limit
     # @return [Array<Integer>] array of numbers
-    def horizontal(value, direction, combination = [], length = 4, bound = 6)
+    def horizontal(value, direction = :f, combination = nil, length: 4, bound: 6)
+      combination ||= [value]
       return combination if combination.size == length
 
-      combination << value if combination.empty?
+      arr_size = combination.size
       next_value = case direction
-                   when :f then (value + combination.size) % bound
-                   when :b then (value - combination.size) % bound
+                   when :f then (value + arr_size) % bound
+                   when :b then (value - arr_size) % bound
                    else raise "Invalid direction: #{direction}"
                    end
 
       return [] if direction == :f ? next_value < combination.last : next_value > combination.last
 
-      combination << next_value
-      horizontal(value, direction, combination)
+      horizontal(value, direction, combination + [next_value], length: length, bound: bound)
     end
 
     # count remaining slots
