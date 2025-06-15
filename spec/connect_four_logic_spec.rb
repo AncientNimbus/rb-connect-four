@@ -379,4 +379,35 @@ describe ConsoleGame::ConnectFourLogic do
       end
     end
   end
+
+  describe "#to_pos" do
+    context "when coord is a valid integer array, and bound is a 7 x 6 grid" do
+      bound = [7, 6]
+      it "returns position value 0 when coordinates is [0, 0]" do
+        coord = [0, 0]
+        result = logic_test.to_pos(coord, bound)
+        expect(result).to eq(0)
+      end
+
+      it "returns position value 41 when coordinates is [5, 6]" do
+        coord = [5, 6]
+        result = logic_test.to_pos(coord, bound)
+        expect(result).to eq(41)
+      end
+
+      it "raise an error if the coord larger than bound" do
+        coord = [6, 6]
+        expect do
+          logic_test.to_pos(coord, bound)
+        end.to raise_error(ArgumentError, "#{coord} is out of bound!")
+      end
+
+      it "raise an error if the coord smaller than bound" do
+        coord = [-1, 0]
+        expect do
+          logic_test.to_pos(coord, bound)
+        end.to raise_error(ArgumentError, "#{coord} is out of bound!")
+      end
+    end
+  end
 end

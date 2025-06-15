@@ -61,14 +61,22 @@ module ConsoleGame
     end
 
     # Convert coordinate array to cell position
-    def to_pos(coord, board_size = 7)
+    # @param coord [Array<Integer>] `[row, col]`
+    # @param bound [Array<Integer>] `[row, col]`
+    # @return [Integer]
+    def to_pos(coord = [0, 0], bound = [7, 6])
       row, col = coord
-      (row * board_size) + col
+      grid_width, _grid_height = bound
+      pos_value = (row * grid_width) + col
+
+      return pos_value if pos_value.between?(0, bound.reduce(:*) - 1)
+
+      raise ArgumentError, "#{coord} is out of bound!"
     end
 
     # Convert cell position to coordinate array
-    def to_coord(pos, board_size = 7)
-      pos.divmod(board_size)
+    def to_coord(pos, bound = [7, 6])
+      pos.divmod(bound[0])
     end
   end
 end
