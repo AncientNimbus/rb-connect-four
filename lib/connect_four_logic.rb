@@ -69,14 +69,19 @@ module ConsoleGame
       grid_width, _grid_height = bound
       pos_value = (row * grid_width) + col
 
-      return pos_value if pos_value.between?(0, bound.reduce(:*) - 1)
+      raise ArgumentError, "#{coord} is out of bound!" unless pos_value.between?(0, bound.reduce(:*) - 1)
 
-      raise ArgumentError, "#{coord} is out of bound!"
+      pos_value
     end
 
     # Convert cell position to coordinate array
+    # @param pos [Integer] positional value
+    # @param bound [Array<Integer>] `[row, col]`
     def to_coord(pos, bound = [7, 6])
-      pos.divmod(bound[0])
+      raise ArgumentError, "#{pos} is out of bound!" unless pos.between?(0, bound.reduce(:*) - 1)
+
+      grid_width, _grid_height = bound
+      pos.divmod(grid_width)
     end
   end
 end

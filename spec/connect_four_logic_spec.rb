@@ -381,7 +381,7 @@ describe ConsoleGame::ConnectFourLogic do
   end
 
   describe "#to_pos" do
-    context "when coord is a valid integer array, and bound is a 7 x 6 grid" do
+    context "when coord is a valid integer array, and bound is a 7 x 6 grid, converts coordinates to position" do
       bound = [7, 6]
       it "returns position value 0 when coordinates is [0, 0]" do
         coord = [0, 0]
@@ -389,12 +389,21 @@ describe ConsoleGame::ConnectFourLogic do
         expect(result).to eq(0)
       end
 
+      it "returns position value 24 when coordinates is [3, 3]" do
+        coord = [3, 3]
+        result = logic_test.to_pos(coord, bound)
+        expect(result).to eq(24)
+      end
+
       it "returns position value 41 when coordinates is [5, 6]" do
         coord = [5, 6]
         result = logic_test.to_pos(coord, bound)
         expect(result).to eq(41)
       end
+    end
 
+    context "when coord is not a valid integer array, and bound is a 7 x 6 grid" do
+      bound = [7, 6]
       it "raise an error if the coord larger than bound" do
         coord = [6, 6]
         expect do
@@ -407,6 +416,43 @@ describe ConsoleGame::ConnectFourLogic do
         expect do
           logic_test.to_pos(coord, bound)
         end.to raise_error(ArgumentError, "#{coord} is out of bound!")
+      end
+    end
+  end
+
+  describe "#to_coord" do
+    context "when pos is a valid value, and bound is a 7 x 6 grid, converts position to coordinates" do
+      bound = [7, 6]
+      it "returns coordinates value [0, 0] when positional value is 0" do
+        pos = 0
+        expect(logic_test.to_coord(pos, bound)).to eq([0, 0])
+      end
+
+      it "returns coordinates value [3, 3] when positional value is 24" do
+        pos = 24
+        expect(logic_test.to_coord(pos, bound)).to eq([3, 3])
+      end
+
+      it "returns coordinates value [5, 6] when positional value is 41" do
+        pos = 41
+        expect(logic_test.to_coord(pos, bound)).to eq([5, 6])
+      end
+    end
+
+    context "when pos is not a valid value, and bound is a 7 x 6 grid" do
+      bound = [7, 6]
+      it "raise an error if the value is larger than bound" do
+        pos = 42
+        expect do
+          logic_test.to_coord(pos, bound)
+        end.to raise_error(ArgumentError, "#{pos} is out of bound!")
+      end
+
+      it "raise an error if the value is smaller than bound" do
+        pos = -1
+        expect do
+          logic_test.to_coord(pos, bound)
+        end.to raise_error(ArgumentError, "#{pos} is out of bound!")
       end
     end
   end
