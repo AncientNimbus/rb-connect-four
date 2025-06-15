@@ -3,6 +3,7 @@
 module ConsoleGame
   # Logic module for the game Connect Four
   module ConnectFourLogic
+    # A hash of lambda functions for calculating movement in 8 directions on a grid
     DIRECTIONS = {
       n: ->(value, step, row) { value + row * step },
       ne: ->(value, step, row) { value + row * step + step },
