@@ -3,12 +3,14 @@
 require_relative "player"
 require_relative "base_game"
 require_relative "console"
+require_relative "connect_four_logic"
 
 # Connect Four Game Module
 module ConsoleGame
   # Connect Four the game
   class ConnectFour < BaseGame
-    INFO = { title: "Connect 4", ver: "v0.5.4" }.freeze
+    include ConnectFourLogic
+    INFO = { title: "Connect 4", ver: "v0.7.1" }.freeze
 
     attr_reader :p1, :p2, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn
@@ -105,12 +107,24 @@ module ConsoleGame
       @board = Array.new(@row) { Array.new(@col, e_slot) }
     end
 
-    # calculate winning combinations
+    # calculate all winning combinations
     def winning_combos
       @combinations = {}
-      # 42.times do |idx|
-      #   combinations[idx] = [123]
-      # end
+      42.times do |idx|
+        combinations[idx] = valid_sequences(idx)
+      end
+    end
+
+    # Calculate valid sequence based on positional value
+    # @param value [Integer] positional value within a matrix
+    # @return [Array<Array<Integer>>] an array of valid directional path within given bound
+    def valid_sequences(value = 0)
+      arr = []
+      DIRECTIONS.each_key do |path|
+        sequence = direction(value, path)
+        arr << sequence unless sequence.empty?
+      end
+      arr
     end
 
     # count remaining slots
