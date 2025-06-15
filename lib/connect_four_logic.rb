@@ -27,17 +27,18 @@ module ConsoleGame
       arr_size = combination.size
       return combination if arr_size == length
 
-      row, _col = bound
       next_value = DIRECTIONS.fetch(path) do |key|
         raise ArgumentError, "Invalid path: #{key}"
-      end.call(value, arr_size, row)
+      end.call(value, arr_size, bound[0])
+
+      combination << next_value
 
       if arr_size > 1
         return [] if out_of_bound?(next_value, bound)
-        return [] if not_one_unit_apart?(path, value, combination, row)
+        return [] if not_one_unit_apart?(path, combination, bound[0])
       end
 
-      direction(value, path, combination + [next_value], length: length, bound: bound)
+      direction(value, path, combination, length: length, bound: bound)
     end
 
     # Helper method to check for out of bound cases for top and bottom borders
@@ -54,10 +55,10 @@ module ConsoleGame
     # @param value_arr [Array<Integer>]
     # @param row [Integer]
     # @return [Boolean]
-    def not_one_unit_apart?(path, start_value, values_arr, row)
+    def not_one_unit_apart?(path, values_arr, row)
       return false unless %i[e w ne nw se sw].include?(path)
 
-      ((start_value % row - values_arr.last % row).abs - values_arr.size).abs != 1
+      ((values_arr.first % row - values_arr.last % row).abs - values_arr.size).abs != 1
     end
 
     # Convert coordinate array to cell position

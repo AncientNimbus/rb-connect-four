@@ -10,7 +10,7 @@ module ConsoleGame
   # Connect Four the game
   class ConnectFour < BaseGame
     include ConnectFourLogic
-    INFO = { title: "Connect 4", ver: "v0.7.1" }.freeze
+    INFO = { title: "Connect 4", ver: "v0.7.7" }.freeze
 
     attr_reader :p1, :p2, :bound, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn, :has_winner
@@ -115,7 +115,9 @@ module ConsoleGame
       bound.reduce(:*).times do |idx|
         combinations[idx] = valid_sequences(idx)
       end
-      # p combinations
+      p combinations[2]
+      p combinations[9]
+      p combinations[16]
     end
 
     # Calculate valid sequence based on positional value
@@ -180,11 +182,14 @@ module ConsoleGame
     # Validate if current player has four in a row
     # @param [ConsoleGame::Player, ConsoleGame::Computer] Player or Computer class object
     def four_in_a_row?(player)
+      return if player.turn < 4
+
+      combinations[player.moves.last].each { |sequence| p sequence }
     end
 
-    def end_game(result)
-      super
-    end
+    # def end_game(result)
+    #   super
+    # end
 
     # Select game mode
     def game_mode

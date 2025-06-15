@@ -33,7 +33,7 @@ module ConsoleGame
       end
     end
 
-    attr_reader :name
+    attr_reader :name, :turn, :moves
     attr_accessor :data, :player_color
 
     def initialize(game_manager = nil, name = "")
@@ -59,6 +59,7 @@ module ConsoleGame
       return nil if value.nil?
 
       data.fetch(:moves) << value
+      @moves = data.fetch(:moves)
     end
 
     # Clear a specific item in player data object
@@ -75,6 +76,7 @@ module ConsoleGame
     # Update player turn count
     def update_turn_count
       data[:turn] = data.fetch(:moves).size
+      @turn = data.fetch(:turn)
     end
   end
 
