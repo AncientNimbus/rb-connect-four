@@ -27,9 +27,7 @@ module ConsoleGame
       return combination if arr_size == length
 
       row, _col = bound
-      next_value = DIRECTIONS.fetch(direction) do |key|
-        raise "Invalid direction: #{key}"
-      end.call(value, arr_size, row)
+      next_value = DIRECTIONS.fetch(direction) { |key| raise "Invalid direction: #{key}" }.call(value, arr_size, row)
 
       if arr_size > 1
         return [] if out_of_bound?(next_value, bound)
