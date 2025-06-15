@@ -13,12 +13,13 @@ module ConsoleGame
     INFO = { title: "Connect 4", ver: "v0.7.1" }.freeze
 
     attr_reader :p1, :p2, :bound, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
-    attr_accessor :board, :mode, :p1_turn
+    attr_accessor :board, :mode, :p1_turn, :has_winner
 
     def initialize(game_manager = nil, input = nil)
       super(game_manager, input, INFO[:title])
       @p1 = game_manager.p1
       @p2 = nil
+      @has_winner = false
 
       # Board asset: cap
       @board_cap ||= fetch_board_asset("cap")
@@ -55,7 +56,7 @@ module ConsoleGame
     # core game loop
     def game_loop
       toss_a_coin
-      play_turn until remaining_slots.zero?
+      play_turn until has_winner || remaining_slots.zero?
     end
 
     # Decide who is starting first

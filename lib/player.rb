@@ -40,7 +40,7 @@ module ConsoleGame
       Player.setup_color
       Player.add_player
       @name = edit_name(name)
-      @data = { moves: [] }
+      @data = init_data
       @player_color = Player.remove_color(Player.colors.sample)
     end
 
@@ -59,6 +59,16 @@ module ConsoleGame
 
       data.fetch(:moves) << value
       # p data.fetch(:moves)
+    end
+
+    # Clear a specific item in player data object
+    def clear_session(symbol)
+      data.fetch(symbol).clear
+    end
+
+    # Initialise player save data
+    def init_data
+      self.data = { moves: [1] }
     end
   end
 
