@@ -26,6 +26,7 @@ module ConsoleGame
         %i[default gray].each { |elem| remove_color(elem) }
       end
 
+      # Remove color option to avoid two players share the same color tag
       # @param color [Symbol]
       def remove_color(color)
         @colors.delete(color)
@@ -58,17 +59,22 @@ module ConsoleGame
       return nil if value.nil?
 
       data.fetch(:moves) << value
-      # p data.fetch(:moves)
     end
 
     # Clear a specific item in player data object
-    def clear_session(symbol)
-      data.fetch(symbol).clear
+    # @param key [Symbol] key value
+    def clear_session(key)
+      data.fetch(key).clear
     end
 
     # Initialise player save data
     def init_data
-      self.data = { moves: [1] }
+      { turn: 0, moves: [] }
+    end
+
+    # Update player turn count
+    def update_turn_count
+      data[:turn] = data.fetch(:moves).size
     end
   end
 
@@ -79,8 +85,11 @@ module ConsoleGame
     end
 
     # Returns a random integer between 1 to 7
-    def random_move(empty_slots)
-      (empty_slots.sample % 7) + 1
+    # @param empty_slots [Array<Integer>]
+    # @param bound [Array<Integer>]
+    def random_move(empty_slots, bound)
+      row, = bound
+      (empty_slots.sample % row) + 1
     end
   end
 end

@@ -78,8 +78,9 @@ module ConsoleGame
 
       user_col = player_choice(player)
 
-      valid_move, user_pos = update_board(player, user_col)
-      player.store_move(user_pos)
+      valid_move, _user_pos = update_board(player, user_col)
+
+      four_in_a_row?(player)
 
       print_board
 
@@ -92,7 +93,7 @@ module ConsoleGame
     def player_choice(player)
       value = nil
       if player.is_a?(Computer)
-        value = player.random_move(empty_slots)
+        value = player.random_move(empty_slots, bound)
         print value
         puts
       else
@@ -147,8 +148,8 @@ module ConsoleGame
 
       real_col = col - 1
       if board[row][real_col] == e_slot
-        process_move(player, real_col, row)
-        [true, to_pos([row, real_col], bound)]
+        pos = process_move(player, row, real_col)
+        [true, pos]
       else
         row += 1
         update_board(player, col, row)
@@ -156,8 +157,14 @@ module ConsoleGame
     end
 
     # Data process when move is valid
-    def process_move(player, col, row)
+    def process_move(player, row, col)
       board[row][col] = f_slot.colorize(player.player_color)
+      pos = to_pos([row, col], bound)
+
+      player.store_move(pos)
+      player.update_turn_count
+
+      pos
     end
 
     # Print game board to console
@@ -168,6 +175,15 @@ module ConsoleGame
       end
       input.print_msg(board_low, pre: "* ")
       puts
+    end
+
+    # Validate if current player has four in a row
+    # @param [ConsoleGame::Player, ConsoleGame::Computer] Player or Computer class object
+    def four_in_a_row?(player)
+    end
+
+    def end_game(result)
+      super
     end
 
     # Select game mode
@@ -186,6 +202,7 @@ module ConsoleGame
         return player if player.is_a?(Computer)
       end
       player.edit_name(input.handle_input(F.s("connect4.name_player", { player: player.edit_name }), allow_empty: true))
+      player.clear_session(:moves)
       player
     end
 
