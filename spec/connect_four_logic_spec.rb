@@ -3,7 +3,6 @@
 require_relative "../lib/connect_four_logic"
 
 describe ConsoleGame::ConnectFourLogic do
-  # Since ConnectFourLogic is a module, we can create a dummy class including it for testing
   let(:dummy_class) { Class.new { include ConsoleGame::ConnectFourLogic } }
   subject(:logic_test) { dummy_class.new }
 
@@ -204,6 +203,32 @@ describe ConsoleGame::ConnectFourLogic do
         expect do
           logic_test.direction(start_value, direction)
         end.to raise_error(ArgumentError, "Invalid direction: test")
+      end
+    end
+  end
+
+  describe "#out_of_bound?" do
+    context "when value is negative, and bound is a 7 x 6 grid" do
+      bound = [7, 6]
+      it "returns true" do
+        value = -1
+        expect(logic_test.out_of_bound?(value, bound)).to be true
+      end
+    end
+
+    context "when value is positive and greater than bound, where bound is a 7 x 6 grid" do
+      bound = [7, 6]
+      it "returns true" do
+        value = 42
+        expect(logic_test.out_of_bound?(value, bound)).to be true
+      end
+    end
+
+    context "when value is positive and within bound, where bound is a 7 x 6 grid" do
+      bound = [7, 6]
+      it "returns false" do
+        value = 41
+        expect(logic_test.out_of_bound?(value, bound)).to be false
       end
     end
   end
