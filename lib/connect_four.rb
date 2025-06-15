@@ -131,25 +131,33 @@ module ConsoleGame
     # @param bound [Array<Integer>] row limit
     # @return [Array<Integer>] array of numbers
     def direction(value = 0, direction = :e, combination = nil, length: 4, bound: [7, 6])
-      row, col = bound
       combination ||= [value]
       arr_size = combination.size
       return combination if arr_size == length
 
+      row, _col = bound
       next_value = DIRECTIONS.fetch(direction) do |key|
         raise "Invalid direction: #{key}"
       end.call(value, arr_size, row)
 
-      max_position = row * col - 1
-      return [] if next_value.negative? || next_value > max_position
-
-      if arr_size > 1 && %i[e w ne nw se sw].include?(direction)
-        abs_v = ((value % row - combination.last % row).abs - arr_size).abs
-        return [] if abs_v != 1
-
+      if arr_size > 1
+        return [] if out_of_bound?(next_value, bound)
+        return [] if not_one_unit_apart?(direction, value, combination, row)
       end
 
       direction(value, direction, combination + [next_value], length: length, bound: bound)
+    end
+
+    # Helper method to check for out of bound cases for top and bottom borders
+    def out_of_bound?(value, bound)
+      value.negative? || value > bound.reduce(:*) - 1
+    end
+
+    # Helper method to check for out of bound cases for left and right borders
+    def not_one_unit_apart?(direction, start_value, values_arr, row)
+      arr_size = values_arr.size
+      one_unit_apart = ((start_value % row - values_arr.last % row).abs - arr_size).abs == 1
+      %i[e w ne nw se sw].include?(direction) && !one_unit_apart
     end
 
     # count remaining slots
