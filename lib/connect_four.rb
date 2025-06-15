@@ -12,7 +12,7 @@ module ConsoleGame
     include ConnectFourLogic
     INFO = { title: "Connect 4", ver: "v0.7.1" }.freeze
 
-    attr_reader :p1, :p2, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
+    attr_reader :p1, :p2, :bound, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn
 
     def initialize(game_manager = nil, input = nil)
@@ -30,9 +30,6 @@ module ConsoleGame
       @e_slot ||= fetch_board_asset("hollow")
       # Board asset: filled slot
       @f_slot ||= fetch_board_asset("filled")
-
-      winning_combos
-      p combinations
     end
 
     # Fetch board asset from textfile
@@ -49,6 +46,7 @@ module ConsoleGame
       greet(p1, p2)
       # set game board
       generate_board
+      winning_combos
       print_board
       # enter game loop
       game_loop
@@ -68,7 +66,7 @@ module ConsoleGame
       input.std_show("connect4.pregame.msg2")
       @p1_turn = [true, false].sample
 
-      sleep(1.3)
+      sleep(0.8)
       input.print_msg(F.s("connect4.pregame.msg3", { player: p1_turn ? p1.name : p2.name }), pre: "* ")
     end
 
@@ -79,7 +77,9 @@ module ConsoleGame
 
       user_col = player_choice(player)
 
-      valid_move = update_board(player, user_col)
+      valid_move, user_pos = update_board(player, user_col)
+      player.store_move(user_pos)
+
       print_board
 
       self.p1_turn = !p1_turn if valid_move
@@ -102,17 +102,18 @@ module ConsoleGame
 
     # Generate game board as array
     def generate_board
-      @col = 7
-      @row = 6
-      @board = Array.new(@row) { Array.new(@col, e_slot) }
+      @bound = [7, 6]
+      row, col = bound
+      @board = Array.new(col) { Array.new(row, e_slot) }
     end
 
     # calculate all winning combinations
     def winning_combos
       @combinations = {}
-      42.times do |idx|
+      bound.reduce(:*).times do |idx|
         combinations[idx] = valid_sequences(idx)
       end
+      # p combinations
     end
 
     # Calculate valid sequence based on positional value
@@ -139,13 +140,14 @@ module ConsoleGame
     # @param player [ConsoleGame::Player, ConsoleGame::Computer]
     # @param col [Integer] column number from input
     # @param row [Integer] expecting value to starts from 0
+    # @return [Array(Boolean, Array<Integer>), nil] Returns [true, position] if move is valid, or nil if column is full
     def update_board(player, col, row = 0)
       return input.print_msg(F.s("connect4.turn.col_err", { col: col }), pre: "* ") if row == 6
 
       real_col = col - 1
       if board[row][real_col] == e_slot
         process_move(player, real_col, row)
-        true
+        [true, to_pos([row, real_col], bound)]
       else
         row += 1
         update_board(player, col, row)

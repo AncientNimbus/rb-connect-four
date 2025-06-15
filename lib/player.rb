@@ -40,7 +40,7 @@ module ConsoleGame
       Player.setup_color
       Player.add_player
       @name = edit_name(name)
-      @data = {}
+      @data = { moves: [] }
       @player_color = Player.remove_color(Player.colors.sample)
     end
 
@@ -50,6 +50,15 @@ module ConsoleGame
       return F.rs("connect4.default.player_name", { num: Player.total_player }) if name.empty?
 
       @name = name.colorize(player_color)
+    end
+
+    # Store player's move
+    # @param value [Integer] Positional value of the grid
+    def store_move(value)
+      return nil if value.nil?
+
+      data.fetch(:moves) << value
+      # p data.fetch(:moves)
     end
   end
 
