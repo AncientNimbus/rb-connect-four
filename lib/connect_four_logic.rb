@@ -17,27 +17,27 @@ module ConsoleGame
 
     # Recursively find the next value depending on direction
     # @param value [Integer] start value
-    # @param direction [Symbol] see DIRECTIONS for available options. E.g., :e for count from left to right
+    # @param path [Symbol] see DIRECTIONS for available options. E.g., :e for count from left to right
     # @param combination [Array<Integer>] default value is an empty array
     # @param length [Integer] expected array length
     # @param bound [Array<Integer>] grid size `[row, col]`
     # @return [Array<Integer>] array of numbers
-    def direction(value = 0, direction = :e, combination = nil, length: 4, bound: [7, 6])
+    def direction(value = 0, path = :e, combination = nil, length: 4, bound: [7, 6])
       combination ||= [value]
       arr_size = combination.size
       return combination if arr_size == length
 
       row, _col = bound
-      next_value = DIRECTIONS.fetch(direction) do |key|
-        raise ArgumentError, "Invalid direction: #{key}"
+      next_value = DIRECTIONS.fetch(path) do |key|
+        raise ArgumentError, "Invalid path: #{key}"
       end.call(value, arr_size, row)
 
       if arr_size > 1
         return [] if out_of_bound?(next_value, bound)
-        return [] if not_one_unit_apart?(direction, value, combination, row)
+        return [] if not_one_unit_apart?(path, value, combination, row)
       end
 
-      direction(value, direction, combination + [next_value], length: length, bound: bound)
+      direction(value, path, combination + [next_value], length: length, bound: bound)
     end
 
     # Helper method to check for out of bound cases for top and bottom borders
@@ -49,13 +49,13 @@ module ConsoleGame
     end
 
     # Helper method to check for out of bound cases for left and right borders
-    # @param direction [Symbol] see DIRECTIONS for available options. E.g., :e for count from left to right
+    # @param path [Symbol] see DIRECTIONS for available options. E.g., :e for count from left to right
     # @param start_value [Integer]
     # @param value_arr [Array<Integer>]
     # @param row [Integer]
     # @return [Boolean]
-    def not_one_unit_apart?(direction, start_value, values_arr, row)
-      return false unless %i[e w ne nw se sw].include?(direction)
+    def not_one_unit_apart?(path, start_value, values_arr, row)
+      return false unless %i[e w ne nw se sw].include?(path)
 
       ((start_value % row - values_arr.last % row).abs - values_arr.size).abs != 1
     end

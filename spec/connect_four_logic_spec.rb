@@ -202,7 +202,7 @@ describe ConsoleGame::ConnectFourLogic do
         direction = :test
         expect do
           logic_test.direction(start_value, direction)
-        end.to raise_error(ArgumentError, "Invalid direction: test")
+        end.to raise_error(ArgumentError, "Invalid path: test")
       end
     end
   end
