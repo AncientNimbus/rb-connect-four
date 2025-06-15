@@ -4,14 +4,14 @@ module ConsoleGame
   # Logic module for the game Connect Four
   module ConnectFourLogic
     DIRECTIONS = {
-      n: ->(value, step, bound) { value + bound * step },
-      ne: ->(value, step, bound) { value + bound * step + step },
-      e: ->(value, step, _bound) { value + step },
-      se: ->(value, step, bound) { value - bound * step + step },
-      s: ->(value, step, bound) { value - bound * step },
-      sw: ->(value, step, bound) { value - bound * step - step },
-      w: ->(value, step, _bound) { value - step },
-      nw: ->(value, step, bound) { value + bound * step - step }
+      n: ->(value, step, row) { value + row * step },
+      ne: ->(value, step, row) { value + row * step + step },
+      e: ->(value, step, _row) { value + step },
+      se: ->(value, step, row) { value - row * step + step },
+      s: ->(value, step, row) { value - row * step },
+      sw: ->(value, step, row) { value - row * step - step },
+      w: ->(value, step, _row) { value - step },
+      nw: ->(value, step, row) { value + row * step - step }
     }.freeze
 
     # Recursively find the next value depending on direction
@@ -19,7 +19,7 @@ module ConsoleGame
     # @param direction [Symbol] see DIRECTIONS for available options. E.g., :e for count from left to right
     # @param combination [Array<Integer>] default value is an empty array
     # @param length [Integer] expected array length
-    # @param bound [Array<Integer>] grid size `[col, row]`
+    # @param bound [Array<Integer>] grid size `[row, col]`
     # @return [Array<Integer>] array of numbers
     def direction(value = 0, direction = :e, combination = nil, length: 4, bound: [7, 6])
       combination ||= [value]
@@ -41,7 +41,7 @@ module ConsoleGame
 
     # Helper method to check for out of bound cases for top and bottom borders
     # @param value [Integer]
-    # @param bound [Array<Integer>] grid size `[col, row]`
+    # @param bound [Array<Integer>] grid size `[row, col]`
     # @return [Boolean]
     def out_of_bound?(value, bound)
       value.negative? || value > bound.reduce(:*) - 1
@@ -54,9 +54,9 @@ module ConsoleGame
     # @param row [Integer]
     # @return [Boolean]
     def not_one_unit_apart?(direction, start_value, values_arr, row)
-      arr_size = values_arr.size
-      one_unit_apart = ((start_value % row - values_arr.last % row).abs - arr_size).abs == 1
-      %i[e w ne nw se sw].include?(direction) && !one_unit_apart
+      return false unless %i[e w ne nw se sw].include?(direction)
+
+      ((start_value % row - values_arr.last % row).abs - values_arr.size).abs != 1
     end
 
     # Convert coordinate array to cell position
