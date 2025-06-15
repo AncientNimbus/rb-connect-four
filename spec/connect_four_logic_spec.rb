@@ -232,4 +232,151 @@ describe ConsoleGame::ConnectFourLogic do
       end
     end
   end
+
+  describe "#not_one_unit_apart?" do
+    context "when direction is east and start value is 4, where bound is a 7 x 6 grid" do
+      start_value = 4
+      direction = :e
+      row = 7
+      it "returns true when the last array value is out of bound" do
+        arr = [4, 5, 6, 7]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns true when the last array value is not the next immediate value of the previous value" do
+        arr = [4, 6]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns false when the last array value is the next immediate value of the previous value" do
+        arr = [4, 5]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be false
+      end
+    end
+
+    context "when direction is west and start value is 37, where bound is a 7 x 6 grid" do
+      start_value = 37
+      direction = :w
+      row = 7
+      it "returns true when the last array value is out of bound" do
+        arr = [37, 36, 35, 34]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns true when the last array value is not the next immediate value of the previous value" do
+        arr = [37, 35]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns false when the last array value is the next immediate value of the previous value" do
+        arr = [37, 36]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be false
+      end
+    end
+    context "when direction is north east and start value is 25, where bound is a 7 x 6 grid" do
+      direction = :ne
+      start_value = 25
+      row = 7
+      it "returns true when the last array value is out of bound" do
+        arr = [25, 33, 41, 49]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns true when the last array value is not the next immediate value one row above" do
+        arr = [25, 34]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns false when the last array value is the next immediate value one row above" do
+        arr = [25, 33]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be false
+      end
+    end
+    context "when direction is north west and start value is 23, where bound is a 7 x 6 grid" do
+      direction = :nw
+      start_value = 23
+      row = 7
+      it "returns true when the last array value is out of bound" do
+        arr = [23, 29, 35, 41]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns true when the last array value is not the next immediate value one row above" do
+        arr = [23, 28]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns false when the last array value is the next immediate value one row above" do
+        arr = [23, 29]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be false
+      end
+    end
+    context "when direction is south east and start value is 18, where bound is a 7 x 6 grid" do
+      direction = :se
+      start_value = 18
+      row = 7
+      it "returns true when the last array value is out of bound" do
+        arr = [18, 12, 6, 0]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns true when the last array value is not the next immediate value one row below" do
+        arr = [18, 13]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns false when the last array value is the next immediate value one row below" do
+        arr = [18, 12]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be false
+      end
+    end
+    context "when direction is south west and start value is 16, where bound is a 7 x 6 grid" do
+      direction = :sw
+      start_value = 16
+      row = 7
+      it "returns true when the last array value is out of bound" do
+        arr = [16, 8, 0, -6]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns true when the last array value is not the next immediate value one row below" do
+        arr = [16, 7]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be true
+      end
+
+      it "returns false when the last array value is the next immediate value one row below" do
+        arr = [16, 8]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be false
+      end
+    end
+
+    context "when it is an edge case, and bound is a 7 x 6 grid" do
+      start_value = 16
+      row = 7
+      it "returns false when direction is out of scope" do
+        direction = :n
+        arr = [0, 1, 2, 3]
+        result = logic_test.not_one_unit_apart?(direction, start_value, arr, row)
+        expect(result).to be false
+      end
+    end
+  end
 end
