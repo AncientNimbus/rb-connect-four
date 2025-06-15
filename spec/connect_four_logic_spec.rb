@@ -210,7 +210,7 @@ describe ConsoleGame::ConnectFourLogic do
   describe "#out_of_bound?" do
     context "when value is negative, and bound is a 7 x 6 grid" do
       bound = [7, 6]
-      it "returns true" do
+      it "returns true if value is -1" do
         value = -1
         expect(logic_test.out_of_bound?(value, bound)).to be true
       end
@@ -218,7 +218,7 @@ describe ConsoleGame::ConnectFourLogic do
 
     context "when value is positive and greater than bound, where bound is a 7 x 6 grid" do
       bound = [7, 6]
-      it "returns true" do
+      it "returns true if value is 42" do
         value = 42
         expect(logic_test.out_of_bound?(value, bound)).to be true
       end
@@ -226,7 +226,7 @@ describe ConsoleGame::ConnectFourLogic do
 
     context "when value is positive and within bound, where bound is a 7 x 6 grid" do
       bound = [7, 6]
-      it "returns false" do
+      it "returns false if value is 41" do
         value = 41
         expect(logic_test.out_of_bound?(value, bound)).to be false
       end
