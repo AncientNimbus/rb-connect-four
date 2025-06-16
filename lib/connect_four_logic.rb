@@ -113,8 +113,10 @@ module ConsoleGame
       return false if player.data.fetch(:turn) < 4
 
       moves = player.data.fetch(:moves)
-      combinations[moves.last].each do |sequence|
-        return true if sequence - moves == []
+      moves.reverse_each do |move|
+        combinations[move].each do |sequence|
+          return true if sequence - moves == []
+        end
       end
       false
     end
