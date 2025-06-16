@@ -11,31 +11,29 @@ module ConsoleGame
   # Connect Four the game
   class ConnectFour < BaseGame
     include ConnectFourLogic
-    INFO = { title: "Connect 4", ver: "v0.8.4" }.freeze
+    INFO = { title: "Connect 4", ver: "v0.8.6" }.freeze
 
     attr_reader :p1, :p2, :bound, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn, :has_winner
 
     def initialize(game_manager = nil, input = nil)
       super(game_manager, input, INFO[:title])
-      @p1 = game_manager.p1
       @p2 = nil
       @has_winner = false
 
       @bound = [7, 6]
-      @board_cap = fetch_board_asset("cap")
-      @board_low = fetch_board_asset("low")
-      @sep = fetch_board_asset("sep")
-      @e_slot = fetch_board_asset("hollow")
-      @f_slot = fetch_board_asset("filled")
+      @board_cap, @board_low, @sep, @e_slot, @f_slot = tf_fetcher("board", *%w[cap low sep hollow filled])
     end
 
-    # Fetch board asset from textfile
-    def fetch_board_asset(element)
-      F.rs("connect4.board.#{element}")
+    # Textfile strings fetcher
+    # @param sub_path [String]
+    # @param keys [Array<String>] key
+    # @return [Array<String>] array of textfile strings
+    def tf_fetcher(sub, *keys)
+      keys.map { |key| F.rs("connect4#{".#{sub}"}.#{key}") }
     end
 
-    # Sequence to setup game board
+    # Sequence to setup game session
     def setup_game
       game_mode
 
@@ -161,6 +159,12 @@ module ConsoleGame
       input.print_msg(F.s("connect4.endgame.player", { p1: winner.name, p2: loser.name, turn: winner.data[:turn] }))
     end
 
+    def restart
+      msg, err, reg = tf_fetcher("restart", *%w[msg1 msg1_err reg])
+      out = input.handle_input(msg, err_msg: err, reg: Regexp.new(reg, "i"))
+      p out
+    end
+
     # Select game mode
     def game_mode
       out = input.handle_input(F.s("connect4.mode"), reg: F.rs("connect4.mode_reg"), err_msg: F.s("connect4.mode_err"))
@@ -205,7 +209,7 @@ module ConsoleGame
   end
 end
 
-# announce winner
 # prompt restart
+# Clear player & Reset game state
 # keyword: exit - exit program
 # keyword: help - print how to play tooltip

@@ -3,7 +3,7 @@
 module ConsoleGame
   # Base Game class
   class BaseGame
-    attr_reader :game_manager, :input, :title, :player
+    attr_reader :game_manager, :input, :title, :p1
     attr_accessor :state, :game_result
 
     # @param game_manager [ConsoleGame::GameManager]
@@ -13,16 +13,15 @@ module ConsoleGame
       @game_manager = game_manager
       @input = input
       @title = title
-      @player = game_config[:player]
+      @p1 = game_config[:players][0]
       @state = :created
-      # @game_data = initialize_game_data
     end
 
     # Game config
     def game_config
       return nil if game_manager.nil?
 
-      { player: game_manager.p1 }
+      { players: [game_manager.p1] }
     end
 
     # State machine
@@ -49,6 +48,7 @@ module ConsoleGame
       self.state = :ended
       @game_result = result
       show_end_screen
+      restart
     end
 
     # Check if current game session is active
@@ -68,5 +68,7 @@ module ConsoleGame
     def show_end_screen
       puts "Game Over! Result: #{@game_result}"
     end
+
+    def restart; end
   end
 end

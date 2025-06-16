@@ -108,3 +108,8 @@ en:
     endgame:
       player: "%{p1} defeated %{p2} in %{turn} moves!"
       tie: "It is a tie!"
+    restart:
+      msg1: "Would you like to play again? (y/n)"
+      msg1_err: "Invalid input, type 'y/n' or 'yes/no'!"
+      msg2: "Game is being reset..."
+      reg: '\A(yes|y|no|n)\z'
