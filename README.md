@@ -2,13 +2,28 @@
 
 [Connect Four](https://en.wikipedia.org/wiki/Connect_Four) is a game I enjoyed playing with my friends, now it is available to play right in your terminal. 
 
-Stay tuned...
-
-
-
 ## Setup
 
-WIP
+```bash
+# Clone the repository
+git clone https://github.com/AncientNimbus/rb-connect-four.git
+cd rb-connect-four
+
+# Install dependencies
+bundle install
+
+# Run the game
+bundle exec ruby main.rb
+
+# Display help
+--help
+
+# Quit the program
+--ttfn
+
+# Launch Connect four
+--play connect4
+```
 
 
 
@@ -28,16 +43,30 @@ WIP
 
 ## Technical Specifications
 
-Core Objectives
+**Core Objectives**
 
 - Written with Ruby
 - TDD approach
 - OOP software architecture
 
-Additional Objectives
+**Additional Objectives**
 
 - UX design for terminal game
 - Localisation ready
+
+**Implementation highlights**
+
+- Mathematical Grid system
+- Precomputed Lookup Table
+- Win condition detection via `Set`
+- Localisation ready via `YAML` configuration file
+- Colourful game interface with terminal interface
+
+**Performance Optimisation**
+
+- All possible winning combinations are calculated once at startup
+- Validation order: Check recent moves first for faster win detection
+- Single formula that handles 6 movement directions 
 
 ### Gems used
 

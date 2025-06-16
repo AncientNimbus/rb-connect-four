@@ -12,7 +12,7 @@ module ConsoleGame
   class ConnectFour < BaseGame
     include ConnectFourLogic
     # Game info
-    INFO = { title: "Connect 4", ver: "v0.9.0" }.freeze
+    INFO = { title: "Connect 4", ver: "v1.0.0" }.freeze
 
     attr_reader :p1, :p2, :bound, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn, :has_winner
