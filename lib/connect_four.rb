@@ -80,7 +80,7 @@ module ConsoleGame
 
       valid_move, _user_pos = update_board(player, user_col)
 
-      four_in_a_row?(player)
+      self.has_winner = four_in_a_row?(player)
 
       print_board
 
@@ -115,9 +115,7 @@ module ConsoleGame
       bound.reduce(:*).times do |idx|
         combinations[idx] = valid_sequences(idx)
       end
-      p combinations[2]
-      p combinations[9]
-      p combinations[16]
+      # p combinations
     end
 
     # Calculate valid sequence based on positional value
@@ -181,10 +179,15 @@ module ConsoleGame
 
     # Validate if current player has four in a row
     # @param [ConsoleGame::Player, ConsoleGame::Computer] Player or Computer class object
+    # @return [Boolean]
     def four_in_a_row?(player)
-      return if player.turn < 4
+      return false if player.turn < 4
 
-      combinations[player.moves.last].each { |sequence| p sequence }
+      moves = player.moves
+      combinations[moves.last].each do |sequence|
+        return true if sequence - moves == []
+      end
+      false
     end
 
     # def end_game(result)
