@@ -48,7 +48,7 @@ module ConsoleGame
     def end_game(result)
       self.state = :ended
       @game_result = result
-      # show_end_screen
+      show_end_screen
     end
 
     # Check if current game session is active
@@ -56,21 +56,7 @@ module ConsoleGame
       state == :playing
     end
 
-    def update
-      return unless active?
-
-      handle_input
-      update_game_logic
-      render_game_state
-      check_end_conditions
-    end
-
     protected
-
-    # Template methods - to be implemented by specific games
-    def initialize_game_data
-      raise NotImplementedError, "Subclasses must implement initialize_game_data"
-    end
 
     def setup_game; end
 
@@ -79,25 +65,8 @@ module ConsoleGame
       input.print_msg(F.s("console.msg.run", { app: title }, :yellow))
     end
 
-    def handle_input
-      raise NotImplementedError, "Subclasses must implement handle_input"
-    end
-
-    def update_game_logic
-      raise NotImplementedError, "Subclasses must implement update_game_logic"
-    end
-
-    def render_game_state
-      raise NotImplementedError, "Subclasses must implement render_game_state"
-    end
-
-    def check_end_conditions
-      # Override in subclasses
-    end
-
     def show_end_screen
       puts "Game Over! Result: #{@game_result}"
-      # @display.pause
     end
   end
 end

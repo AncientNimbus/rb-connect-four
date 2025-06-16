@@ -67,7 +67,7 @@ en:
       * How to play:
       * 1. Select a game mode
       *    • [1] Player vs Player
-      *    • [2] Player vs Computer (Coming soon!)
+      *    • [2] Player vs Computer
       * 2. The game will randomly decide who goes first.
       * 3. Player will each take turn to drop a colored disc into a column.
       * 4. To drop the colored disc, enter a column number between 1 to 7.
@@ -77,9 +77,7 @@ en:
       *    If the whole grid fills up and no one has four in a row, the game is a tie.
     mode: "Select a game mode "
     mode_err: "Invalid input, provide a number between 1 to 2 "
-    # mode_err: "Invalid input, only mode 1 is currently available. "
     mode_reg: '\A[1-2]\z'
-    # mode_reg: '\A[1]\z'
     mode_pvp: "Player vs Player mode selected"
     mode_pve: "Player vs Computer mode selected"
     name_player: "Please name %{player}: "
@@ -107,3 +105,6 @@ en:
       reg: '\A[1-7]\z'
       msg1: "%{player}'s turn: "
       col_err: "Column %{col} is full, pick another one!"
+    endgame:
+      player: "%{p1} defeated %{p2} in %{turn} moves!"
+      tie: "It is a tie!"

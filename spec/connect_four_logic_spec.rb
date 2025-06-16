@@ -559,4 +559,11 @@ describe ConsoleGame::ConnectFourLogic do
       end
     end
   end
+
+  describe "#winning_combos" do
+  end
+  describe "#valid_sequences" do
+  end
+  describe "#four_in_a_row?" do
+  end
 end

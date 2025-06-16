@@ -11,7 +11,7 @@ module ConsoleGame
   # Connect Four the game
   class ConnectFour < BaseGame
     include ConnectFourLogic
-    INFO = { title: "Connect 4", ver: "v0.8.1" }.freeze
+    INFO = { title: "Connect 4", ver: "v0.8.4" }.freeze
 
     attr_reader :p1, :p2, :bound, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn, :has_winner
@@ -143,10 +143,22 @@ module ConsoleGame
     end
 
     # End game handling
-    def end_game
-      super(nil)
-      msg = p1_turn ? "#{p1.name} has won in #{p1.data[:turn]} moves!" : "#{p2.name} has won in #{p2.data[:turn]} moves!"
-      puts msg
+    def end_game(result = { winner: nil, loser: nil })
+      if has_winner
+        result[:winner] = p1_turn ? p1 : p2
+        result[:loser] = p1_turn ? p2 : p1
+      else
+        result[:winner] = :tie
+      end
+      super(result)
+    end
+
+    def show_end_screen
+      winner = game_result.fetch(:winner)
+      loser = game_result.fetch(:loser)
+      return input.std_show("connect4.endgame.tie") if winner == :tie
+
+      input.print_msg(F.s("connect4.endgame.player", { p1: winner.name, p2: loser.name, turn: winner.data[:turn] }))
     end
 
     # Select game mode
