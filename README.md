@@ -56,6 +56,7 @@ bundle exec ruby main.rb
 
 **Implementation highlights**
 
+- Robust input handling (Butterfingers-proof)
 - Mathematical Grid system
 - Precomputed Lookup Table
 - Win condition detection via `Set`

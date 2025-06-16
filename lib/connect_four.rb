@@ -210,8 +210,9 @@ module ConsoleGame
       if %w[yes y].include?(out.downcase)
         input.print_msg(msg2, pre: "* ")
         new_game
+      else
+        input.print_msg(msg3, pre: "* ")
       end
-      input.print_msg(msg3, pre: "* ")
     end
 
     # == Helper ==
