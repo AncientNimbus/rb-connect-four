@@ -6,11 +6,12 @@ require_relative "console"
 require_relative "connect_four_logic"
 
 # Connect Four Game Module
+# @author Ancient Nimbus
 module ConsoleGame
   # Connect Four the game
   class ConnectFour < BaseGame
     include ConnectFourLogic
-    INFO = { title: "Connect 4", ver: "v0.7.7" }.freeze
+    INFO = { title: "Connect 4", ver: "v0.7.9" }.freeze
 
     attr_reader :p1, :p2, :bound, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn, :has_winner
@@ -57,6 +58,7 @@ module ConsoleGame
     def game_loop
       toss_a_coin
       play_turn until has_winner || remaining_slots.zero?
+      end_game
     end
 
     # Decide who is starting first
@@ -84,7 +86,7 @@ module ConsoleGame
 
       print_board
 
-      self.p1_turn = !p1_turn if valid_move
+      self.p1_turn = !p1_turn if valid_move && !has_winner
     end
 
     # Get column value from player
@@ -190,9 +192,11 @@ module ConsoleGame
       false
     end
 
-    # def end_game(result)
-    #   super
-    # end
+    def end_game
+      super(nil)
+      msg = p1_turn ? "#{p1.name} has won in #{p1.turn} moves!" : "#{p2.name} has won in #{p2.turn} moves!"
+      puts msg
+    end
 
     # Select game mode
     def game_mode
@@ -239,8 +243,6 @@ module ConsoleGame
   end
 end
 
-# core game loop
-# the game ends when a player placed four discs that are connected either vertically, horizontally or diagonally.
 # announce winner
 # prompt restart
 # keyword: exit - exit program
