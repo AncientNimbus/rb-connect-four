@@ -11,6 +11,7 @@ module ConsoleGame
   # Connect Four the game
   class ConnectFour < BaseGame
     include ConnectFourLogic
+    # Game info
     INFO = { title: "Connect 4", ver: "v0.8.6" }.freeze
 
     attr_reader :p1, :p2, :bound, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
@@ -26,7 +27,7 @@ module ConsoleGame
     end
 
     # Textfile strings fetcher
-    # @param sub_path [String]
+    # @param sub [String]
     # @param keys [Array<String>] key
     # @return [Array<String>] array of textfile strings
     def tf_fetcher(sub, *keys)

@@ -35,7 +35,7 @@ module FileUtils
 
     # Return the full path of a specific file.
     # @param filename [String]
-    # @param *dirs [Array<String>] `filepath("en", ".config", "locale")` will return <root...>/.config/locale/en
+    # @param dirs [Array<String>] `filepath("en", ".config", "locale")` will return <root...>/.config/locale/en
     def filepath(filename, *dirs)
       File.join(proj_root, *dirs, filename)
     end
@@ -107,7 +107,7 @@ module FileUtils
 
     # Retrieves a localized string and perform String interpolation if needed.
     # @param key_path [String] the translation key path e.g., "welcome.greeting"
-    # @param swaps [Hash] performs String interpolation, placeholder: `%{adj}` e.g., `{ adj: "awesome" }`
+    # @param swaps [Hash] performs String interpolation, placeholder: e.g., `{ adj: "awesome" }`
     # @param format [Symbol] set target file format, default: `:yml`
     # @return [String] the translated and interpolated string
     def rs(key_path, swaps = {}, format: :yml)
@@ -122,7 +122,7 @@ module FileUtils
 
     # Retrieves a localized string and perform String interpolation and colorize text if needed.
     # @param key_path [String] the translation key path e.g., "welcome.greeting"
-    # @param swaps [Hash] performs String interpolation, placeholder: `%{adj}` e.g., `{ adj: "awesome" }`
+    # @param swaps [Hash] performs String interpolation, placeholder: e.g., `{ adj: "awesome" }`
     # @param colorize_swaps [Symbol] color interpolated strings via colorize
     # @param color [Symbol] color all text via colorize
     # @param format [Symbol] set target file format, default: `:yml`

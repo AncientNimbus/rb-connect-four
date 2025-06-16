@@ -51,8 +51,7 @@ module ConsoleGame
 
     # Helper method to check for out of bound cases for left and right borders
     # @param path [Symbol] see DIRECTIONS for available options. E.g., :e for count from left to right
-    # @param start_value [Integer]
-    # @param value_arr [Array<Integer>]
+    # @param values_arr [Array<Integer>]
     # @param row [Integer]
     # @return [Boolean]
     def not_one_unit_apart?(path, values_arr, row)
@@ -107,7 +106,7 @@ module ConsoleGame
     end
 
     # Validate if current player has four in a row
-    # @param [ConsoleGame::Player, ConsoleGame::Computer] Player or Computer class object
+    # @param player [ConsoleGame::Player, ConsoleGame::Computer] Player or Computer class object
     # @return [Boolean]
     def four_in_a_row?(player)
       return false if player.data.fetch(:turn) < 4
