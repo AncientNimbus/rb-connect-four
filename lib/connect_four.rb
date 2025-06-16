@@ -20,9 +20,9 @@ module ConsoleGame
     def initialize(game_manager = nil, input = nil)
       super(game_manager, input, INFO[:title])
       @p2 = nil
-      @has_winner = false
 
       @bound = [7, 6]
+      @combinations = winning_combos
       @board_cap, @board_low, @sep, @e_slot, @f_slot = tf_fetcher("board", *%w[cap low sep hollow filled])
     end
 
@@ -41,8 +41,14 @@ module ConsoleGame
       player_setup
       greet(p1, p2)
 
+      new_game
+    end
+
+    # New game sequence
+    def new_game
+      @has_winner = false
+      [p1, p2].each(&:init_data)
       generate_board
-      winning_combos
       print_board
 
       play
@@ -163,7 +169,7 @@ module ConsoleGame
     def restart
       msg, err, reg = tf_fetcher("restart", *%w[msg1 msg1_err reg])
       out = input.handle_input(msg, err_msg: err, reg: Regexp.new(reg, "i"))
-      p out
+      new_game if %w[yes y].include?(out)
     end
 
     # Select game mode
