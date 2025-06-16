@@ -12,9 +12,10 @@ module ConsoleGame
     # @param pre [String] message prefix
     # @param suf [String] message suffix
     # @param mode [Symbol] expecting the following symbols: `puts`, `print`, `p`
-    def print_msg(msg = "Using message printer", pre: "", suf: "", mode: :puts)
+    def print_msg(msg = "Using message printer", pre: "", suf: "", mode: :puts, delay: 0)
       return ArgumentError("Invalid mode used for this method") unless %i[puts print p].include?(mode)
 
+      sleep(delay) if delay.positive?
       formatted_msg = "#{pre}#{msg}#{suf}"
       method(mode).call(formatted_msg)
     end
