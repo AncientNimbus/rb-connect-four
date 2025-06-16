@@ -12,7 +12,7 @@ module ConsoleGame
   class ConnectFour < BaseGame
     include ConnectFourLogic
     # Game info
-    INFO = { title: "Connect 4", ver: "v0.8.6" }.freeze
+    INFO = { title: "Connect 4", ver: "v0.9.0" }.freeze
 
     attr_reader :p1, :p2, :bound, :combinations, :board_cap, :board_low, :sep, :e_slot, :f_slot, :empty_slots
     attr_accessor :board, :mode, :p1_turn, :has_winner
@@ -26,15 +26,7 @@ module ConsoleGame
       @board_cap, @board_low, @sep, @e_slot, @f_slot = tf_fetcher("board", *%w[cap low sep hollow filled])
     end
 
-    private
-
-    # Textfile strings fetcher
-    # @param sub [String]
-    # @param keys [Array<String>] key
-    # @return [Array<String>] array of textfile strings
-    def tf_fetcher(sub, *keys)
-      keys.map { |key| F.rs("connect4#{".#{sub}"}.#{key}") }
-    end
+    # == Flow ==
 
     # Sequence to setup game session
     def setup_game
@@ -63,16 +55,7 @@ module ConsoleGame
       end_game
     end
 
-    # Decide who is starting first
-    def toss_a_coin
-      input.std_show("connect4.pregame.msg1")
-      input.handle_input(allow_empty: true)
-
-      input.std_show("connect4.pregame.msg2")
-      @p1_turn = [true, false].sample
-
-      input.print_msg(F.s("connect4.pregame.msg3", { player: p1_turn ? p1.name : p2.name }), pre: "* ", delay: 0.8)
-    end
+    # == Core ==
 
     # Play turn (Core loop)
     def play_turn
@@ -96,11 +79,6 @@ module ConsoleGame
       else
         input.handle_input(reg: F.rs("connect4.turn.reg"), err_msg: F.s("connect4.turn.err")).to_i
       end
-    end
-
-    # Generate game board as array
-    def generate_board
-      @board = Array.new(bound[1]) { Array.new(bound[0], e_slot) }
     end
 
     # count remaining slots
@@ -139,6 +117,13 @@ module ConsoleGame
       pos
     end
 
+    # == Board Display ==
+
+    # Generate game board as array
+    def generate_board
+      @board = Array.new(bound[1]) { Array.new(bound[0], e_slot) }
+    end
+
     # Print game board to console
     def print_board
       input.print_msg(board_cap, pre: "* ")
@@ -149,29 +134,23 @@ module ConsoleGame
       puts
     end
 
-    # End game handling
-    def end_game(result = { winner: nil, loser: nil })
-      if has_winner
-        result[:winner] = p1_turn ? p1 : p2
-        result[:loser] = p1_turn ? p2 : p1
-      else
-        result[:winner] = :tie
+    # == Pregame ==
+
+    # Print game intro
+    def show_intro
+      super
+      input.show("connect4.boot")
+    end
+
+    # Greet user
+    # @param player1 [ConsoleGame::Player] player class object
+    # @param player2 [ConsoleGame::Player, ConsoleGame::Computer] player class or computer class object
+    def greet(player1, player2)
+      input.print_msg(F.s("connect4.#{mode == 1 ? 'greet_pvp' : 'greet_pve'}",
+                          { p1: player1.name, p2: player2.name, title: title }))
+      [player1, player2].each do |player|
+        input.print_msg(F.s("connect4.assignment", { player: player.name, disc: f_slot.colorize(player.player_color) }))
       end
-      super(result)
-    end
-
-    def show_end_screen
-      winner = game_result.fetch(:winner)
-      loser = game_result.fetch(:loser)
-      return input.std_show("connect4.endgame.tie") if winner == :tie
-
-      input.print_msg(F.s("connect4.endgame.player", { p1: winner.name, p2: loser.name, turn: winner.data[:turn] }))
-    end
-
-    def restart
-      msg, err, reg = tf_fetcher("restart", *%w[msg1 msg1_err reg])
-      out = input.handle_input(msg, err_msg: err, reg: Regexp.new(reg, "i"))
-      new_game if %w[yes y].include?(out)
     end
 
     # Select game mode
@@ -199,21 +178,59 @@ module ConsoleGame
       @p2 = player_profile(p2)
     end
 
-    # Greet user
-    # @param player1 [ConsoleGame::Player] player class object
-    # @param player2 [ConsoleGame::Player, ConsoleGame::Computer] player class or computer class object
-    def greet(player1, player2)
-      input.print_msg(F.s("connect4.#{mode == 1 ? 'greet_pvp' : 'greet_pve'}",
-                          { p1: player1.name, p2: player2.name, title: title }))
-      [player1, player2].each do |player|
-        input.print_msg(F.s("connect4.assignment", { player: player.name, disc: f_slot.colorize(player.player_color) }))
+    # == Post game ==
+
+    # End game handling
+    def end_game(result = { winner: nil, loser: nil })
+      if has_winner
+        result[:winner] = p1_turn ? p1 : p2
+        result[:loser] = p1_turn ? p2 : p1
+      else
+        result[:winner] = :tie
       end
+      super(result)
     end
 
-    # Print game intro
-    def show_intro
-      super
-      input.show("connect4.boot")
+    def show_end_screen
+      winner = game_result.fetch(:winner)
+      loser = game_result.fetch(:loser)
+      return input.std_show("connect4.endgame.tie") if winner == :tie
+
+      input.print_msg(F.s("connect4.endgame.player", { p1: winner.name, p2: loser.name, turn: winner.data[:turn] }),
+                      pre: "* ")
+    end
+
+    # Prompt user to restart
+    def restart
+      msg, err, reg, msg2, msg3 = tf_fetcher("restart", *%w[msg1 msg1_err reg msg2 msg3])
+      out = input.handle_input(msg, err_msg: err, reg: Regexp.new(reg, "i"))
+      if %w[yes y].include?(out.downcase)
+        input.print_msg(msg2, pre: "* ")
+        new_game
+      end
+      input.print_msg(msg3, pre: "* ")
+    end
+
+    # == Helper ==
+
+    # Textfile strings fetcher
+    # @param sub [String]
+    # @param keys [Array<String>] key
+    # @return [Array<String>] array of textfile strings
+    def tf_fetcher(sub, *keys)
+      sub = ".#{sub}" unless sub.empty?
+      keys.map { |key| F.rs("connect4#{sub}.#{key}") }
+    end
+
+    # Decide who is starting first
+    def toss_a_coin
+      input.std_show("connect4.pregame.msg1")
+      input.handle_input(allow_empty: true)
+
+      input.std_show("connect4.pregame.msg2")
+      @p1_turn = [true, false].sample
+
+      input.print_msg(F.s("connect4.pregame.msg3", { player: p1_turn ? p1.name : p2.name }), pre: "* ", delay: 0.8)
     end
   end
 end
