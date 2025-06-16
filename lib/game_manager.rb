@@ -30,12 +30,14 @@ module ConsoleGame
       menu.handle_input(allow_empty: true) while @running
     end
 
+    # Greet user
     def greet
       menu.show("console.ver")
       menu.show("console.boot")
       menu.show("console.menu")
     end
 
+    # Run game: Connect Four
     def connect_four
       self.active_game = ConnectFour.new(self, menu)
       active_game.start

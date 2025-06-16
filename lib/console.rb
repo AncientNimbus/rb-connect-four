@@ -2,6 +2,7 @@
 
 require_relative "file_utils"
 
+# Alias for FileUtils
 F = FileUtils
 
 module ConsoleGame
@@ -101,6 +102,7 @@ module ConsoleGame
       print_msg(F.s(str), pre: pre)
     end
 
+    # Display help string
     def help(_arr = [])
       show("console.help")
     end

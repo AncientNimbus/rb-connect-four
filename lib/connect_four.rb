@@ -193,6 +193,7 @@ module ConsoleGame
       super(result)
     end
 
+    # Display end game message
     def show_end_screen
       winner = game_result.fetch(:winner)
       loser = game_result.fetch(:loser)
