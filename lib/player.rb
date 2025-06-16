@@ -16,6 +16,11 @@ module ConsoleGame
         @number_of_player += 1
       end
 
+      # Set global player count
+      def player_count(value)
+        @number_of_player = value
+      end
+
       # Return number of active players
       def total_player
         @number_of_player

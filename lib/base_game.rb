@@ -14,6 +14,7 @@ module ConsoleGame
       @input = input
       @title = title
       @p1 = game_config[:players][0]
+      Player.player_count(1)
       @state = :created
     end
 

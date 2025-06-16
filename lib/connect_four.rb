@@ -26,6 +26,8 @@ module ConsoleGame
       @board_cap, @board_low, @sep, @e_slot, @f_slot = tf_fetcher("board", *%w[cap low sep hollow filled])
     end
 
+    private
+
     # Textfile strings fetcher
     # @param sub [String]
     # @param keys [Array<String>] key
@@ -216,7 +218,5 @@ module ConsoleGame
   end
 end
 
-# prompt restart
-# Clear player & Reset game state
 # keyword: exit - exit program
 # keyword: help - print how to play tooltip
