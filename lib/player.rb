@@ -33,7 +33,7 @@ module ConsoleGame
       end
     end
 
-    attr_reader :name, :turn, :moves
+    attr_reader :name
     attr_accessor :data, :player_color
 
     def initialize(game_manager = nil, name = "")
@@ -41,8 +41,8 @@ module ConsoleGame
       Player.setup_color
       Player.add_player
       @name = edit_name(name)
-      @data = init_data
       @player_color = Player.remove_color(Player.colors.sample)
+      init_data
     end
 
     # Edit player name
@@ -53,30 +53,22 @@ module ConsoleGame
       @name = name.colorize(player_color)
     end
 
+    # Initialise player save data
+    def init_data
+      @data = { turn: 0, moves: [] }
+    end
+
     # Store player's move
     # @param value [Integer] Positional value of the grid
     def store_move(value)
       return nil if value.nil?
 
       data.fetch(:moves) << value
-      @moves = data.fetch(:moves)
-    end
-
-    # Clear a specific item in player data object
-    # @param key [Symbol] key value
-    def clear_session(key)
-      data.fetch(key).clear
-    end
-
-    # Initialise player save data
-    def init_data
-      { turn: 0, moves: [] }
     end
 
     # Update player turn count
     def update_turn_count
       data[:turn] = data.fetch(:moves).size
-      @turn = data.fetch(:turn)
     end
   end
 
@@ -91,7 +83,9 @@ module ConsoleGame
     # @param bound [Array<Integer>]
     def random_move(empty_slots, bound)
       row, = bound
-      (empty_slots.sample % row) + 1
+      value = (empty_slots.sample % row) + 1
+      print "#{value}\n"
+      value
     end
   end
 end
