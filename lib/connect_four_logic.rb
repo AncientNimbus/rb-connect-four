@@ -84,5 +84,39 @@ module ConsoleGame
       grid_width, _grid_height = bound
       pos.divmod(grid_width)
     end
+
+    # calculate all winning combinations
+    def winning_combos
+      @combinations = {}
+      bound.reduce(:*).times do |idx|
+        combinations[idx] = valid_sequences(idx)
+      end
+      # p combinations
+    end
+
+    # Calculate valid sequence based on positional value
+    # @param value [Integer] positional value within a matrix
+    # @return [Array<Array<Integer>>] an array of valid directional path within given bound
+    def valid_sequences(value = 0)
+      arr = []
+      DIRECTIONS.each_key do |path|
+        sequence = direction(value, path)
+        arr << sequence unless sequence.empty?
+      end
+      arr
+    end
+
+    # Validate if current player has four in a row
+    # @param [ConsoleGame::Player, ConsoleGame::Computer] Player or Computer class object
+    # @return [Boolean]
+    def four_in_a_row?(player)
+      return false if player.data.fetch(:turn) < 4
+
+      moves = player.data.fetch(:moves)
+      combinations[moves.last].each do |sequence|
+        return true if sequence - moves == []
+      end
+      false
+    end
   end
 end
