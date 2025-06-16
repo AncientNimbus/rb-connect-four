@@ -86,11 +86,11 @@ module ConsoleGame
 
     # calculate all winning combinations
     def winning_combos
-      @combinations = {}
+      combinations = {}
       bound.reduce(:*).times do |idx|
         combinations[idx] = valid_sequences(idx)
       end
-      # p combinations
+      combinations
     end
 
     # Calculate valid sequence based on positional value
