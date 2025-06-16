@@ -55,6 +55,8 @@ module ConsoleGame
       end_game
     end
 
+    private
+
     # == Core ==
 
     # Play turn (Core loop)
