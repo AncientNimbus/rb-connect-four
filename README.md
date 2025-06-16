@@ -1,6 +1,9 @@
 # Connect Four ♦️
+![Connect Four Splash screen](https://github.com/user-attachments/assets/c6ba0c37-98e2-45e6-8aa1-4a19a4102ccf)
 
 [Connect Four](https://en.wikipedia.org/wiki/Connect_Four) is a game I enjoyed playing with my friends, now it is available to play right in your terminal. 
+
+[v1.0.0 Gameplay footage](https://youtube.com/shorts/VuAdV_Qhu_s?si=81jbzTuxLqFJLOrS)
 
 ## Setup
 
@@ -28,6 +31,7 @@ bundle exec ruby main.rb
 
 
 ## How to play
+![Gameplay pic](https://github.com/user-attachments/assets/d63084f3-fcc3-4083-a87b-da517e25b255)
 
 1. Select a game mode
    1. Mode [1]: Player vs Player
@@ -67,7 +71,19 @@ bundle exec ruby main.rb
 
 - All possible winning combinations are calculated once at startup
 - Validation order: Check recent moves first for faster win detection
-- Single formula that handles 6 movement directions 
+- Single formula that handles 6 movement directions
+
+**Error handling**
+
+- User input is validate against Regex pattern
+- Warning is displayed when user attampted to add disc to a full row
+
+<details>
+  <summary>Screenshot</summary>
+   
+![connect_four_gameplay_1](https://github.com/user-attachments/assets/e447522a-56a3-4604-894c-d06c5ff7684d)
+
+</details>
 
 ### Gems used
 
