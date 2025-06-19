@@ -64,7 +64,7 @@ module ConsoleGame
       player = p1_turn ? p1 : p2
       user_col = player_choice(player)
 
-      valid_move, _user_pos = update_board(player, user_col)
+      valid_move, _user_pos = update_board(player, [0, user_col])
       self.has_winner = four_in_a_row?(player)
 
       print_board
@@ -92,10 +92,10 @@ module ConsoleGame
 
     # Update game board
     # @param player [ConsoleGame::Player, ConsoleGame::Computer]
-    # @param col [Integer] column number from input
-    # @param row [Integer] expecting value to starts from 0
+    # @param coord [Array<Integer>] expects a `[row, input_col]` coordinates
     # @return [Array(Boolean, Array<Integer>), nil] Returns [true, position] if move is valid, or nil if column is full
-    def update_board(player, col, row = 0)
+    def update_board(player, coord = [0, 1])
+      row, col = coord
       return input.print_msg(F.s("connect4.turn.col_err", { col: col }), pre: "* ") if row == 6
 
       real_col = col - 1
@@ -104,7 +104,7 @@ module ConsoleGame
         [true, pos]
       else
         row += 1
-        update_board(player, col, row)
+        update_board(player, [row, col])
       end
     end
 
